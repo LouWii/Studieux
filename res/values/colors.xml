@@ -5,4 +5,6 @@
     <color name="gray_slidingButtons">#11ffffff</color>
     <color name="gray_slidingButtons_pressed">#0Dffffff</color>
     <color name="gray_slidingButtons_focused">#aaffffff</color>
+    <color name="black">#FF000000</color>
+    <color name="redButtons">#FFFA4B2A</color>
 </resources>

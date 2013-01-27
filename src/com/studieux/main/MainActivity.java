@@ -7,9 +7,15 @@ import android.app.Activity;
 import android.graphics.Point;
 import android.view.Display;
 import android.view.Menu;
-
+import android.view.View;
 public class MainActivity extends Activity {
 
+	MenuButton coursButton;
+	MenuButton devoirsButton;
+	MenuButton matieresButton;
+	MenuButton parametresButton;
+	MenuButton currentButton;
+	SlidingMenu menu;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -19,9 +25,9 @@ public class MainActivity extends Activity {
 		Point size = new Point();
 		display.getSize(size);
 		int width = size.x;
-		int behindOffset = (int) (width - (0.5*width));
+		int behindOffset = (int) (width - (0.7*width));
 		
-		SlidingMenu menu = new SlidingMenu(this);
+		menu = new SlidingMenu(this);
 		menu.setMode(SlidingMenu.LEFT);
 		menu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
         menu.setShadowWidthRes(R.dimen.shadow_width);
@@ -32,14 +38,30 @@ public class MainActivity extends Activity {
         menu.setMenu(R.layout.sliding_menu);
         menu.setBehindOffset(behindOffset);
         
-        //hehe
-	}
+        coursButton = (MenuButton) findViewById(R.id.coursButton);
+        coursButton.drawRedLine();
+        coursButton.setActivity(this);
+        devoirsButton = (MenuButton) findViewById(R.id.devoirsButton);
+        devoirsButton.setActivity(this);
+        matieresButton = (MenuButton) findViewById(R.id.matieresButton);
+        matieresButton.setActivity(this);
+        parametresButton = (MenuButton) findViewById(R.id.parametresButton);
+        parametresButton.setActivity(this);
+        currentButton = coursButton; 
+}
 
+	public void toggle(View v)
+	{
+		this.menu.toggle();
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.activity_main, menu);
 		return true;
 	}
+	
+	
 
 }
