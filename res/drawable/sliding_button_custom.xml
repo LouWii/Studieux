@@ -3,55 +3,27 @@
     <item android:state_pressed="true" >
         <shape>
             <gradient
-                android:startColor="@color/gray_slidingButtons_pressed"
-                android:endColor="@color/gray_slidingButtons_pressed"
+                android:startColor="@color/redButtons"
+                android:endColor="@color/redButtons"
                 android:angle="270" />
-            <stroke
-                android:width="0dp" />
-            
-            <corners
-                android:radius="0dp" />
-            <padding
-                android:left="10dp"
-                android:top="10dp"
-                android:right="10dp"
-                android:bottom="10dp" />
         </shape>
     </item>
 
     <item android:state_focused="true" >
         <shape>
             <gradient
-                android:endColor="@color/gray_slidingButtons_focused"
-                android:startColor="@color/gray_slidingButtons_focused"
+                android:endColor="@color/redButtons"
+                android:startColor="@color/redButtons"
                 android:angle="270" />
-            <stroke
-                android:width="0dp" />
-            <corners
-                android:radius="3dp" />
-            <padding
-                android:left="10dp"
-                android:top="10dp"
-                android:right="10dp"
-                android:bottom="10dp" />
         </shape>
     </item>
 
     <item>  
         <shape>
             <gradient
-                android:endColor="@color/gray_slidingButtons"
-                android:startColor="@color/gray_slidingButtons"
+                android:endColor="@color/gray_menu"
+                android:startColor="@color/gray_menu"
                 android:angle="270" />
-            <stroke
-                android:width="0dp" />
-            <corners
-                android:radius="3dp" />
-            <padding
-                android:left="10dp"
-                android:top="10dp"
-                android:right="10dp"
-                android:bottom="10dp" />
         </shape>
     </item>
 </selector>

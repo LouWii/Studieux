@@ -15,7 +15,10 @@ public class MainActivity extends Activity {
 	MenuButton matieresButton;
 	MenuButton parametresButton;
 	MenuButton currentButton;
+	
+	
 	SlidingMenu menu;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
