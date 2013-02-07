@@ -25,22 +25,31 @@
             android:layout_height="40dp"
             android:clickable="true"
             android:layout_marginBottom="1dp"
-            android:tag="0"
+            android:tag="bouton0"
             android:background="@drawable/sliding_button_custom">
 
             <View
                 android:id="@+id/view1"
                 android:layout_width="5dp"
                 android:layout_height="match_parent"
-                android:background="@color/transparent" />
+                android:background="@color/redButtons" />
+            
+            <ImageView 
+                android:id="@+id/parametres_images"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/parametres2"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                />
 
             <TextView
                 android:id="@+id/textView1"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_marginLeft="20dp"
+                android:fontFamily=""
                 android:gravity="center_vertical"
-                android:text="Cours"
+                android:text="COURS"
                 android:textColor="#FFFFFFFF"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -53,22 +62,30 @@
             android:layout_height="40dp"
             android:layout_marginBottom="1dp"
             android:clickable="true" 
-            android:tag="1"
+            android:tag="bouton1"
             android:background="@drawable/sliding_button_custom">
 
             <View
-                android:id="@+id/view1"
+                android:id="@+id/view2"
                 android:layout_width="5dp"
                 android:layout_height="match_parent"
                 android:background="@color/transparent"/>
 			
+            <ImageView 
+                android:id="@+id/parametres_images"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/parametres2"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                />
+            
             <TextView
-                android:id="@+id/textView1"
+                android:id="@+id/textView2"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_marginLeft="20dp"
                 android:gravity="center_vertical"
-                android:text="Devoirs"
+                android:text="DEVOIRS"
                 android:textColor="#FFFFFFFF"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -81,22 +98,30 @@
             android:layout_height="40dp"
             android:layout_marginBottom="1dp"
             android:clickable="true" 
-            android:tag="2"
+            android:tag="bouton2"
             android:background="@drawable/sliding_button_custom">
 
             <View
-                android:id="@+id/view1"
+                android:id="@+id/view3"
                 android:layout_width="5dp"
                 android:layout_height="match_parent"
                 android:background="@color/transparent"/>
 
+            <ImageView 
+                android:id="@+id/parametres_images"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/parametres2"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                />
+            
             <TextView
-                android:id="@+id/textView1"
+                android:id="@+id/textView3"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_marginLeft="20dp"
                 android:gravity="center_vertical"
-                android:text="Matières"
+                android:text="MATIERES"
                 android:textColor="#FFFFFFFF"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -109,25 +134,34 @@
             android:layout_height="40dp"
             android:layout_marginBottom="1dp"
             android:clickable="true" 
-            android:tag="3"
+            android:tag="bouton3"
             android:background="@drawable/sliding_button_custom">
 
             <View
-                android:id="@+id/view1"
+                android:id="@+id/view4"
                 android:layout_width="5dp"
                 android:layout_height="match_parent"
                 android:background="@color/transparent"/>
+            
+            <ImageView 
+                android:id="@+id/parametres_images"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/parametres2"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                />
 
             <TextView
-                android:id="@+id/textView1"
+                android:id="@+id/textView4"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_marginLeft="20dp"
                 android:gravity="center_vertical"
-                android:text="Paramètres"
+                android:text="PARAMETRES"
                 android:textColor="#FFFFFFFF"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:typeface="normal" />
             
         </com.studieux.main.MenuButton>
         

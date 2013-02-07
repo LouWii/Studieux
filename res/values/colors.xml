@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="white">#ffffffff</color>
-    <color name="gray_menu">#ff191b1a</color>
+    <color name="gray_menu">#ff31312e</color>
     <color name="gray_slidingButtons">#11ffffff</color>
     <color name="gray_slidingButtons_pressed">#0Dffffff</color>
     <color name="gray_slidingButtons_focused">#aaffffff</color>

@@ -22,7 +22,8 @@
                 android:id="@+id/listView1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#d6d6d6" >
+                android:background="@color/gray_menu" 
+                android:divider="@color/white">
 
             </ListView>
 

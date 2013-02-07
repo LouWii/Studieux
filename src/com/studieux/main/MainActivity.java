@@ -4,54 +4,36 @@ import com.slidingmenu.lib.SlidingMenu;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Point;
 import android.view.Display;
 import android.view.Menu;
 import android.view.View;
-public class MainActivity extends Activity {
-
-	MenuButton coursButton;
-	MenuButton devoirsButton;
-	MenuButton matieresButton;
-	MenuButton parametresButton;
-	MenuButton currentButton;
-	
-	
-	SlidingMenu menu;
+import android.view.View.OnClickListener;
+public class MainActivity extends MenuActivity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
-		Display display = getWindowManager().getDefaultDisplay();
-		Point size = new Point();
-		display.getSize(size);
-		int width = size.x;
-		int behindOffset = (int) (width - (0.7*width));
-		
-		menu = new SlidingMenu(this);
-		menu.setMode(SlidingMenu.LEFT);
-		menu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
-        menu.setShadowWidthRes(R.dimen.shadow_width);
-        menu.setShadowDrawable(R.drawable.shadow);
-        menu.setBehindOffsetRes(R.dimen.slidingmenu_offset);
-        menu.setFadeDegree(0.35f);
-        menu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
-        menu.setMenu(R.layout.sliding_menu);
-        menu.setBehindOffset(behindOffset);
-        
-        coursButton = (MenuButton) findViewById(R.id.coursButton);
-        coursButton.drawRedLine();
-        coursButton.setActivity(this);
-        devoirsButton = (MenuButton) findViewById(R.id.devoirsButton);
-        devoirsButton.setActivity(this);
-        matieresButton = (MenuButton) findViewById(R.id.matieresButton);
-        matieresButton.setActivity(this);
-        parametresButton = (MenuButton) findViewById(R.id.parametresButton);
-        parametresButton.setActivity(this);
-        currentButton = coursButton; 
+		initMenu();
+  	  	View v = this.findViewById(android.R.id.home);
+  	  	v.setOnClickListener(new OnClickListener() {	
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				getMenu().toggle();
+			}
+		});
 }
+
+	@Override
+	protected void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+	}
 
 	public void toggle(View v)
 	{
@@ -65,6 +47,21 @@ public class MainActivity extends Activity {
 		return true;
 	}
 	
+	public void onConfigurationChanged(Configuration newConfig) {
+		  super.onConfigurationChanged(newConfig);
+		}
 	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		// TODO Auto-generated method stub
+		super.onSaveInstanceState(outState);
+	}
+	
+	@Override   
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+	  super.onRestoreInstanceState(savedInstanceState);
+	}
 
+
+	
 }

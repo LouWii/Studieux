@@ -2,6 +2,7 @@ package com.studieux.main;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -29,8 +30,10 @@ public class MenuButton extends LinearLayout {
 				if(!((MainActivity)main).currentButton.equals(MenuButton.this))
 				{
 					MenuButton.this.drawRedLine();
-					((MainActivity)main).currentButton.removeRedColor();
-					((MainActivity)main).currentButton = MenuButton.this;
+					((MenuActivity)main).currentButton.removeRedColor();
+					((MenuActivity)main).currentButton = MenuButton.this;
+					((MenuActivity)main).goToNext((String)getTag());
+					System.out.println("dflkfjkdfkkdhfkjdh");
 				}	
 			}
 		});
