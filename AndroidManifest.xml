@@ -35,6 +35,10 @@
             android:name="com.studieux.main.PeriodeActivity"
             android:label="@string/title_activity_periode" >
         </activity>
+         <activity
+            android:name="com.studieux.main.PeriodeAddActivity"
+            android:label="@string/title_activity_periode_add" >
+        </activity>
     </application>
 
 </manifest>

@@ -59,12 +59,21 @@ public class MenuActivity extends Activity {
 	
 	protected void goToNext(String tag)
 	{
-		menu.toggle();
 		Intent i = new Intent(this, CoursActivity.class);
 		startActivity(i);
+		this.overridePendingTransition(R.anim.animation_enter,
+                R.anim.animation_leave);
+		menu.toggle();
+		
 	}
 	
-	
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		super.onBackPressed();
+		overridePendingTransition(R.anim.animation_back_enter,
+                R.anim.animation_back_leave);
+}
 	
 	public MenuButton getCoursButton() {
 		return coursButton;
