@@ -4,9 +4,13 @@ import com.slidingmenu.lib.SlidingMenu;
 
 import android.os.Bundle;
 import android.app.Activity;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+
+import android.content.Intent;
+
 import android.graphics.Point;
 import android.view.Display;
 import android.view.Menu;
@@ -38,6 +42,12 @@ public class MainActivity extends MenuActivity {
 	public void toggle(View v)
 	{
 		this.menu.toggle();
+	}
+	
+	public void ajouterPeriode(View v)
+	{
+		Intent intention = new Intent(MainActivity.this, PeriodeActivity.class);
+		startActivity(intention);
 	}
 	
 	@Override

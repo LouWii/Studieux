@@ -1,0 +1,51 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PeriodeAddActivity" >
+
+    <EditText
+        android:id="@+id/periodeNameEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="54dp"
+        android:ems="10"
+        android:hint="@string/PeriodeNameHint" >
+
+        <requestFocus />
+    </EditText>
+
+    <EditText
+        android:id="@+id/dateDebutEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/periodeNameEdit"
+        android:layout_below="@+id/periodeNameEdit"
+        android:layout_marginTop="54dp"
+        android:ems="10"
+        android:inputType="date" />
+
+    <EditText
+        android:id="@+id/dateFinEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/dateDebutEdit"
+        android:layout_below="@+id/dateDebutEdit"
+        android:layout_marginTop="94dp"
+        android:ems="10"
+        android:inputType="date" />
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/dateFinEdit"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="24dp"
+        android:text="@string/buttonEnregistrer" 
+        android:onClick="enregistrer" />
+
+</RelativeLayout>

@@ -73,5 +73,15 @@
         android:layout_marginTop="300dp"
         android:onClick="toggle"
         android:text="Clique sur le bouton louis :)" />
+    
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/textView1"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="250dp"
+        android:onClick="ajouterPeriode"
+        android:text="Ajouter periode" />
 
 </RelativeLayout>

@@ -31,6 +31,10 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/MyTheme" >
         </activity>
+        <activity
+            android:name="com.studieux.main.PeriodeActivity"
+            android:label="@string/title_activity_periode" >
+        </activity>
     </application>
 
 </manifest>
