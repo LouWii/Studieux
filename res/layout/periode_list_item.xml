@@ -2,24 +2,31 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    android:background="#bbb" >
 
     <TextView
         android:id="@+id/periodeListItemNomPeriode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:layout_marginTop="20dp"
+        android:text="TextView"
+        android:textSize="@dimen/list_TitleItem"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/periodeListItemDateDebut"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:text="TextView" 
+        android:layout_marginLeft="25dp"/>
 
     <TextView
         android:id="@+id/periodeListItemDateFin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:text="TextView" 
+        android:layout_marginLeft="25dp"
+        android:layout_marginBottom="20dp"/>
 
 </LinearLayout>

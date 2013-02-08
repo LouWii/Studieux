@@ -1,5 +1,12 @@
 package com.studieux.main;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.studieux.bdd.DaoMaster;
 import com.studieux.bdd.DaoMaster.DevOpenHelper;
 import com.studieux.bdd.DaoSession;
@@ -14,6 +21,7 @@ import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 
 public class PeriodeActivity extends Activity {
 
@@ -29,6 +37,20 @@ public class PeriodeActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_periode);
 		
+		this.updateList();
+        
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		//update la liste lorsqu'on revient sur l'activité
+		this.updateList();
+	}
+	
+	public void updateList()
+	{
 		//Db init
 		DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "studieux-db", null);
         db = helper.getWritableDatabase();
@@ -40,14 +62,39 @@ public class PeriodeActivity extends Activity {
         String ddColumn = PeriodeDao.Properties.Date_debut.columnName;
         String orderBy = ddColumn + " COLLATE LOCALIZED ASC";
         cursor = db.query(periodeDao.getTablename(), periodeDao.getAllColumns(), null, null, null, null, orderBy);
-        String[] from = { PeriodeDao.Properties.Nom.columnName, ddColumn, PeriodeDao.Properties.Date_fin.columnName };
+        //String[] from = { PeriodeDao.Properties.Nom.columnName, ddColumn, PeriodeDao.Properties.Date_fin.columnName };
+        String[] from = {"title", "date_debut", "date_fin"};
         int[] to = { R.id.periodeListItemNomPeriode , R.id.periodeListItemDateDebut, R.id.periodeListItemDateFin };
-        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.periode_list_item, cursor, from, to, 0);
+        //SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.periode_list_item, cursor, from, to, 0);
+        
+        //On parse la liste pour convertir les long en Date, avant affichage
+        List<Map<String, String>> data = new ArrayList<Map<String, String>>();
+        cursor.moveToFirst();
+        while (!cursor.isBeforeFirst() && !cursor.isLast())
+        {
+        	//Contient le détail d'une période
+        	Map<String, String> datum = new HashMap<String, String>(3);
+        	datum.put("title", cursor.getString(PeriodeDao.Properties.Nom.ordinal));
+        	SimpleDateFormat dateFormater = new SimpleDateFormat("dd MM yyyy");
+        	Date d = new Date(cursor.getLong(PeriodeDao.Properties.Date_debut.ordinal));
+        	datum.put("date_debut", dateFormater.format(d));
+        	d = new Date(cursor.getLong(PeriodeDao.Properties.Date_fin.ordinal));
+        	datum.put("date_fin", dateFormater.format(d));
+        	
+        	data.add(datum);
+        	cursor.moveToNext();
+        }
+        
+        //Adapter pour notre listView
+        SimpleAdapter adapter = new SimpleAdapter(this, 
+        		data,
+        		R.layout.periode_list_item,
+                from,
+                to);
         
         //on récupère la liste on lui affecte l'adapter
     	ListView listview = (ListView) findViewById(R.id.periodeListView);
     	listview.setAdapter(adapter);
-        
 	}
 
 	@Override
