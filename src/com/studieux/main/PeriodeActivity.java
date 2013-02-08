@@ -94,6 +94,7 @@ public class PeriodeActivity extends Activity {
         
         //on récupère la liste on lui affecte l'adapter
     	ListView listview = (ListView) findViewById(R.id.periodeListView);
+    	
     	listview.setAdapter(adapter);
 	}
 
