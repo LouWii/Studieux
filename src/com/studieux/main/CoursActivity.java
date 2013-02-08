@@ -15,6 +15,9 @@ public class CoursActivity extends MenuActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_cours);
 		initMenu();	
+		currentButtonIndex = 1;
+		//findViewById(R.id.viewRed2).setBackgroundColor(getResources().getColor(R.color.redButtons));
+		//menuButtons[1].drawRedLine();
 	}
 
 	@Override

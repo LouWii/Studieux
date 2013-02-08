@@ -9,8 +9,8 @@ import android.widget.LinearLayout;
 
 public class MenuButton extends LinearLayout {
 
-	private View ligneRouge;
-	private Activity main;
+
+	private MenuActivity main;
 
 	
 	public MenuButton(Context context, AttributeSet attrs)
@@ -18,42 +18,23 @@ public class MenuButton extends LinearLayout {
         super(context, attrs);
     }
 	
+	
 	@Override
 	protected void onFinishInflate() {
 		// TODO Auto-generated method stub
 		super.onFinishInflate();
-		ligneRouge = this.getChildAt(0);
-		this.setOnClickListener(new OnClickListener() {
-			
+		this.setOnClickListener(new OnClickListener() {			
 			@Override
 			public void onClick(View v) {
-				if(!((MainActivity)main).currentButton.equals(MenuButton.this))
+				if(!main.currentButtonIndex.equals(MenuButton.this.getTag()))
 				{
-					MenuButton.this.drawRedLine();
-					((MenuActivity)main).currentButton.removeRedColor();
-					((MenuActivity)main).currentButton = MenuButton.this;
-					((MenuActivity)main).goToNext((String)getTag());
-					System.out.println("dflkfjkdfkkdhfkjdh");
+					main.goToNext((Integer)MenuButton.this.getTag());
 				}	
 			}
 		});
 	}
 	
-	
-	//Eleve la bande rouge du bouton
-	public void removeRedColor()
-	{
-		MenuButton.this.ligneRouge.setBackgroundColor(getResources().getColor(R.color.transparent));
-	}
-	
-	
-	//dessine la bande rouge du bouton
-	public void drawRedLine()
-	{
-		MenuButton.this.ligneRouge.setBackgroundColor(getResources().getColor(R.color.redButtons));
-	}
-	
-	public void setActivity(Activity a)
+	public void setActivity(MenuActivity a)
 	{
 		this.main = a;
 	}

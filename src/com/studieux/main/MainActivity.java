@@ -1,18 +1,8 @@
 package com.studieux.main;
 
-import com.slidingmenu.lib.SlidingMenu;
-
 import android.os.Bundle;
-import android.app.Activity;
-
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-
-import android.content.Intent;
-
-import android.graphics.Point;
-import android.view.Display;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -23,6 +13,9 @@ public class MainActivity extends MenuActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		initMenu();
+		View v1 = findViewById(R.id.viewRed0);
+		v1.setBackgroundColor(getResources().getColor(R.color.redButtons));
+		currentButtonIndex = 0;
   	  	View v = this.findViewById(android.R.id.home);
   	  	v.setOnClickListener(new OnClickListener() {	
 			@Override
@@ -72,6 +65,4 @@ public class MainActivity extends MenuActivity {
 	  super.onRestoreInstanceState(savedInstanceState);
 	}
 
-
-	
 }

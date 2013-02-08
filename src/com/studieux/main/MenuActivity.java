@@ -7,25 +7,18 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Display;
+import android.widget.TextView;
 
 public class MenuActivity extends Activity {
 
-	protected MenuButton coursButton;
-	
-
-
-	protected MenuButton devoirsButton;
-	protected MenuButton matieresButton;
-	protected MenuButton parametresButton;
-	protected MenuButton currentButton;
-		
+	MenuButton[] menuButtons;
+	Integer currentButtonIndex;
 	protected SlidingMenu menu;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 	}
-	
 	
 	protected void initMenu()
 	{
@@ -34,7 +27,7 @@ public class MenuActivity extends Activity {
 		display.getSize(size);
 		int width = size.x;
 		int behindOffset = (int) (width - (0.7*width));
-		System.out.println("heheeeeee");
+		
 		menu = new SlidingMenu(this);
 		menu.setMode(SlidingMenu.LEFT);
 		menu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
@@ -46,25 +39,52 @@ public class MenuActivity extends Activity {
         menu.setMenu(R.layout.sliding_menu);
         menu.setBehindOffset(behindOffset);
 
-        coursButton = (MenuButton) findViewById(R.id.coursButton);
-        coursButton.setActivity(this);
-        devoirsButton = (MenuButton) findViewById(R.id.devoirsButton);
-        devoirsButton.setActivity(this);
-        matieresButton = (MenuButton) findViewById(R.id.matieresButton);
-        matieresButton.setActivity(this);
-        parametresButton = (MenuButton) findViewById(R.id.parametresButton);
-        parametresButton.setActivity(this);
-        currentButton = coursButton;
+        this.menuButtons = new MenuButton[5];
+        
+        this.menuButtons[0] = (MenuButton) findViewById(R.id.acceuilButton);
+        this.menuButtons[1] = (MenuButton) findViewById(R.id.periodesButton);
+        this.menuButtons[2] = (MenuButton) findViewById(R.id.devoirsButton);
+        this.menuButtons[3] = (MenuButton) findViewById(R.id.matieresButton);
+        this.menuButtons[4] = (MenuButton) findViewById(R.id.parametresButton);
+       
+        for(int i = 0 ; i < menuButtons.length ; i++)
+        {
+        	menuButtons[i].setActivity(this);
+        	menuButtons[i].setTag(i);
+        }
 	}
 	
-	protected void goToNext(String tag)
+	protected void goToNext(Integer tag)
 	{
-		Intent i = new Intent(this, CoursActivity.class);
-		startActivity(i);
-		this.overridePendingTransition(R.anim.animation_enter,
-                R.anim.animation_leave);
-		menu.toggle();
-		
+		Intent intention = null;
+		switch (tag) {
+		case 0:
+			intention = new Intent(MenuActivity.this, MainActivity.class);
+			intention.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			break;
+		case 1 :
+			 intention = new Intent(MenuActivity.this, PeriodeActivity.class);
+			
+			break;
+		default:
+			intention = new Intent(MenuActivity.this, CoursActivity.class);
+			break;
+		}
+		startActivity(intention);
+		if(tag == 0)
+		{
+			overridePendingTransition(R.anim.animation_back_enter,
+	                R.anim.animation_back_leave);
+		}
+		else
+		{
+			this.overridePendingTransition(R.anim.animation_enter,
+			        R.anim.animation_leave);
+			menu.toggle();
+		}
+		//this.overridePendingTransition(R.anim.animation_enter,
+          //      R.anim.animation_leave);
+		currentButtonIndex = tag;
 	}
 	
 	@Override
@@ -74,56 +94,6 @@ public class MenuActivity extends Activity {
 		overridePendingTransition(R.anim.animation_back_enter,
                 R.anim.animation_back_leave);
 }
-	
-	public MenuButton getCoursButton() {
-		return coursButton;
-	}
-
-
-	public void setCoursButton(MenuButton coursButton) {
-		this.coursButton = coursButton;
-	}
-
-
-	public MenuButton getDevoirsButton() {
-		return devoirsButton;
-	}
-
-
-	public void setDevoirsButton(MenuButton devoirsButton) {
-		this.devoirsButton = devoirsButton;
-	}
-
-
-	public MenuButton getMatieresButton() {
-		return matieresButton;
-	}
-
-
-	public void setMatieresButton(MenuButton matieresButton) {
-		this.matieresButton = matieresButton;
-	}
-
-
-	public MenuButton getParametresButton() {
-		return parametresButton;
-	}
-
-
-	public void setParametresButton(MenuButton parametresButton) {
-		this.parametresButton = parametresButton;
-	}
-
-
-	public MenuButton getCurrentButton() {
-		return currentButton;
-	}
-
-
-	public void setCurrentButton(MenuButton currentButton) {
-		this.currentButton = currentButton;
-	}
-
 
 	public SlidingMenu getMenu() {
 		return menu;
