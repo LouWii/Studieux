@@ -20,10 +20,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.Menu;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
+import android.widget.AdapterView.OnItemLongClickListener;
 
-public class PeriodeActivity extends Activity {
+public class PeriodeActivity extends MenuActivity {
 
 	//DB Stuff
 	private Cursor cursor;
@@ -36,6 +39,8 @@ public class PeriodeActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_periode);
+		
+		initMenu();
 		
 		this.updateList();
         
@@ -74,12 +79,13 @@ public class PeriodeActivity extends Activity {
         {
         	//Contient le détail d'une période
         	Map<String, String> datum = new HashMap<String, String>(3);
+        	datum.put("id", "" + cursor.getLong(PeriodeDao.Properties.Id.ordinal) );
         	datum.put("title", cursor.getString(PeriodeDao.Properties.Nom.ordinal));
         	SimpleDateFormat dateFormater = new SimpleDateFormat("dd MM yyyy");
         	Date d = new Date(cursor.getLong(PeriodeDao.Properties.Date_debut.ordinal));
-        	datum.put("date_debut", dateFormater.format(d));
+        	datum.put("date_debut", "Date de début : " + dateFormater.format(d));
         	d = new Date(cursor.getLong(PeriodeDao.Properties.Date_fin.ordinal));
-        	datum.put("date_fin", dateFormater.format(d));
+        	datum.put("date_fin", "Date de fin : " + dateFormater.format(d));
         	
         	data.add(datum);
         	cursor.moveToNext();
@@ -96,6 +102,24 @@ public class PeriodeActivity extends Activity {
     	ListView listview = (ListView) findViewById(R.id.periodeListView);
     	
     	listview.setAdapter(adapter);
+    	
+    	listview.setOnItemLongClickListener( new OnItemLongClickListener () {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+				// On récupère l'item clické = HashMap<String, String>
+				HashMap<String, String> data = (HashMap<String, String>) arg0.getItemAtPosition(arg2);
+				
+				Intent intention = new Intent(PeriodeActivity.this, PeriodeAddActivity.class);
+				intention.putExtra( "id", Long.parseLong(data.get("id")) );
+				startActivity(intention);
+				
+				//Toast.makeText(PeriodeActivity.this, "id: " + data.get("id"), Toast.LENGTH_SHORT).show();
+				
+				return false;
+			}
+    		
+    	});
 	}
 
 	@Override

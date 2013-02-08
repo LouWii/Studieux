@@ -27,17 +27,21 @@
         </activity>
         <activity
             android:name="com.studieux.main.CoursActivity"
-            android:label="@string/title_activity_cours" 
             android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/title_activity_cours"
             android:theme="@style/MyTheme" >
         </activity>
         <activity
             android:name="com.studieux.main.PeriodeActivity"
             android:label="@string/title_activity_periode" >
         </activity>
-         <activity
+        <activity
             android:name="com.studieux.main.PeriodeAddActivity"
             android:label="@string/title_activity_periode_add" >
+        </activity>
+        <activity
+            android:name="com.studieux.main.MatiereActivity"
+            android:label="@string/title_activity_matiere" >
         </activity>
     </application>
 

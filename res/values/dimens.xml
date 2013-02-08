@@ -21,6 +21,6 @@
     <dimen name="shadow_width">30dp</dimen>
 
     <integer name="num_cols">1</integer>
-    <dimen name="list_TitleItem">25dp</dimen>
+    <dimen name="list_TitleItem">20dp</dimen>
 
 </resources>
