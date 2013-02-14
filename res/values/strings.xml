@@ -4,9 +4,7 @@
     <string name="app_name">Studieux</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
-
     <string name="title_activity_cours">CoursActivity</string>
-
     <string name="title_activity_periode_add">PeriodeAddActivity</string>
     
     <string name="PeriodeText">Nom de la période :</string>
@@ -20,5 +18,7 @@
     <string name="buttonEnregistrer">Enregistrer</string>
     <string name="title_activity_periode">PeriodeActivity</string>
 	<string name="menu_add">Ajout</string>
+    <string name="title_activity_matiere">MatiereActivity</string>
+
 
 </resources>

@@ -18,6 +18,8 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
+
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.view.Menu;
@@ -41,6 +43,7 @@ public class PeriodeAddActivity extends Activity {
 	private DaoMaster daoMaster;
     private DaoSession daoSession;
     private PeriodeDao periodeDao;
+    private Periode periode;
 	
     @Override
     protected Dialog onCreateDialog(int id) {
@@ -94,7 +97,8 @@ public class PeriodeAddActivity extends Activity {
         daoMaster = new DaoMaster(db);
         daoSession = daoMaster.newSession();
         periodeDao = daoSession.getPeriodeDao();
-		
+		periode = new Periode();
+        
 		nom = (EditText) findViewById(R.id.periodeNameEdit);
 		dateDebut = (EditText) findViewById(R.id.dateDebutEdit);
 		dateFin = (EditText) findViewById(R.id.dateFinEdit);
@@ -119,6 +123,31 @@ public class PeriodeAddActivity extends Activity {
                 return false;  
 			}
         });
+	}
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		
+		Bundle donnees = getIntent().getExtras();
+		if (donnees != null) //si on a passé une ID à l'activité = modification
+		{
+			DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+			periode = periodeDao.load(donnees.getLong("id"));
+			nom.setText(periode.getNom());
+			dateDebut.setText(formatter.format(periode.getDate_debut()));
+			dateFin.setText(formatter.format(periode.getDate_fin()));
+		}
+		else
+		{
+			Calendar prev = Calendar.getInstance();
+			prev.add(Calendar.MONTH, -3);
+			Calendar next = Calendar.getInstance();
+			next.add(Calendar.MONTH, 3);
+			
+			dateDebut.setText(prev.get(Calendar.DAY_OF_MONTH) + "/" + prev.get(Calendar.MONTH) + "/" + prev.get(Calendar.YEAR));
+			dateFin.setText(next.get(Calendar.DAY_OF_MONTH) + "/" + next.get(Calendar.MONTH) + "/" + next.get(Calendar.YEAR));
+		}
 	}
 
 	@Override
@@ -190,12 +219,15 @@ public class PeriodeAddActivity extends Activity {
 		}
 		
 		//Enregistrement en BDD
-		Periode p = new Periode(null, nom.getText().toString(), dateDebutDate, dateFinDate);
+		periode.setNom(nom.getText().toString());
+		periode.setDate_debut(dateDebutDate);
+		periode.setDate_fin(dateFinDate);
 		
-		if (periodeDao.insert(p) != 0 )
+		if (periodeDao.insert(periode) != 0 )
 		{
 			Toast.makeText(PeriodeAddActivity.this, "Periode enregistrée", Toast.LENGTH_SHORT).show();	
 		}
+		
 		finish();
 		
 	}
