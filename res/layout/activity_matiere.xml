@@ -1,8 +1,57 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/matiereMainLayoutContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MatiereActivity" >
 
+    <TextView
+        android:id="@+id/matiere_periodeName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="14dp"
+        android:text="Large Text"
+        android:textAppearance="?android:attr/textAppearanceLarge" 
+        android:onClick="selectionnerPeriode"
+        />
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/matiere_periodeName"
+        android:layout_alignBottom="@+id/matiere_periodeName"
+        android:layout_marginLeft="18dp"
+        android:layout_toRightOf="@+id/matiere_periodeName" 
+        android:onClick="selectionnerPeriode"
+        />
+
+    <EditText
+        android:id="@+id/editText1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/matiere_periodeName"
+        android:layout_below="@+id/button1"
+        android:layout_marginLeft="14dp"
+        android:layout_marginTop="59dp"
+        android:ems="10" 
+        android:hint="Nom de la matière"
+        >
+
+        <requestFocus />
+    </EditText>
+
+    <EditText
+        android:id="@+id/editText2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/editText1"
+        android:layout_centerVertical="true"
+        android:ems="10"
+        android:inputType="number" 
+        android:hint="Coef."/>
 
 </RelativeLayout>

@@ -1,17 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
-    
-    <ListView
-        android:id="@+id/periodeSelectListView"
-        android:layout_width="match_parent"
+    android:layout_width="fill_parent" android:layout_height="fill_parent"
+    android:id="@+id/layoutContainer" android:orientation="vertical"
+    android:paddingLeft="30dp"
+    android:paddingRight="30dp"
+    android:paddingTop="50dp"
+    android:paddingBottom="50dp"
+    >
+
+    <LinearLayout
+        android:layout_width="wrap_content" 
         android:layout_height="wrap_content"
-        android:layout_marginLeft="3dp"
-        android:layout_marginRight="3dp"
-        android:layout_marginTop="10dp" >
+        android:orientation="vertical"
+        android:background="@drawable/border"
+        android:padding="10dip"
+        >
+        
+        <TextView android:layout_width="fill_parent"
+               android:layout_height="fill_parent"
+               android:text="Périodes"
+               android:textSize="30dp"
+               />
+        
+		<ListView android:id="@id/android:list"
+               android:layout_width="fill_parent"
+               android:layout_height="fill_parent"
+               android:drawSelectorOnTop="false" />
 
-    </ListView>
+     	<TextView android:id="@id/android:empty"
+               android:layout_width="fill_parent"
+               android:layout_height="fill_parent"
+               android:text="At the moment it is empty"/>
 
+	</LinearLayout>
+	
 </LinearLayout>

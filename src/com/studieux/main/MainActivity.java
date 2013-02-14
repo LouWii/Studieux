@@ -3,6 +3,7 @@ package com.studieux.main;
 import android.os.Bundle;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.app.DialogFragment;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -39,8 +40,13 @@ public class MainActivity extends MenuActivity {
 	
 	public void ajouterPeriode(View v)
 	{
-		Intent intention = new Intent(MainActivity.this, PeriodeActivity.class);
+		Intent intention = new Intent(MainActivity.this, MatiereActivity.class);
 		startActivity(intention);
+		
+		//DialogFragment newFragment = new PeriodeSellectionDialogFragment();
+	    //newFragment.show(getFragmentManager(), "ih");
+		//String tag = "dez";
+		//newFragment.show(getFragmentManager(), tag);
 	}
 	
 	@Override
