@@ -1,5 +1,6 @@
 package com.studieux.main;
 
+import android.R.color;
 import android.os.Bundle;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -14,16 +15,9 @@ public class MainActivity extends MenuActivity {
 		setContentView(R.layout.activity_main);
 		initMenu();
 		View v1 = findViewById(R.id.viewRed0);
-		v1.setBackgroundColor(getResources().getColor(R.color.redButtons));
+		v1.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
 		currentButtonIndex = 0;
-  	  	View v = this.findViewById(android.R.id.home);
-  	  	v.setOnClickListener(new OnClickListener() {	
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				getMenu().toggle();
-			}
-		});
+  	  	
 }
 
 	@Override

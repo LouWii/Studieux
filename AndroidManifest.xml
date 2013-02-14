@@ -34,7 +34,8 @@
         <activity
             android:name="com.studieux.main.PeriodeActivity"
             android:label="@string/title_activity_periode"
-            android:theme="@style/MyTheme" >
+            android:theme="@style/MyTheme" 
+            >
         </activity>
          <activity
             android:name="com.studieux.main.PeriodeAddActivity"

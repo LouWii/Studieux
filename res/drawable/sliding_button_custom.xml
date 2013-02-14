@@ -3,8 +3,8 @@
     <item android:state_pressed="true" >
         <shape>
             <gradient
-                android:startColor="@color/redButtons"
-                android:endColor="@color/redButtons"
+                android:startColor="@android:color/holo_blue_light"
+                android:endColor="@android:color/holo_blue_light"
                 android:angle="270" />
         </shape>
     </item>
@@ -12,8 +12,8 @@
     <item android:state_focused="true" >
         <shape>
             <gradient
-                android:endColor="@color/redButtons"
-                android:startColor="@color/redButtons"
+                android:endColor="@android:color/holo_blue_light"
+                android:startColor="@android:color/holo_blue_light"
                 android:angle="270" />
         </shape>
     </item>

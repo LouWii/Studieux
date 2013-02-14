@@ -8,9 +8,17 @@
     <string name="title_activity_cours">CoursActivity</string>
 
     <string name="title_activity_periode_add">PeriodeAddActivity</string>
-    <string name="PeriodeNameHint">Nom de la période. Par exemple \&quot;Semestre 1\&quot;</string>
+    
+    <string name="PeriodeText">Nom de la période :</string>
+    <string name="PeriodeTextExample">Par exemple \&quot;Semestre 1\&quot;</string>
+    
+    <string name="PeriodeNameHint">Période</string>
+    <string name="periodeDebutText">Date de début :</string>
+    <string name="periodeFinText">Date de fin :</string>
+    
+    
     <string name="buttonEnregistrer">Enregistrer</string>
     <string name="title_activity_periode">PeriodeActivity</string>
-
+	<string name="menu_add">Ajout</string>
 
 </resources>
