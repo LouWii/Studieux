@@ -19,6 +19,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -39,9 +40,11 @@ public class PeriodeActivity extends MenuActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_periode);
-		
+
 		initMenu();
-		
+		View v1 = findViewById(R.id.viewRed1);
+		v1.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
+		currentButtonIndex = 1;
 		this.updateList();
         
 	}
@@ -128,11 +131,28 @@ public class PeriodeActivity extends MenuActivity {
 		getMenuInflater().inflate(R.menu.activity_periode, menu);
 		return true;
 	}
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	        case android.R.id.home:
+	            // This is called when the Home (Up) button is pressed
+	            // in the Action Bar.
+	            finish();
+	            return true;
+	        case R.id.menu_add:
+	        	this.ajouter(findViewById(R.id.menu_add));
+	        	break;
+	    }
+	    return super.onOptionsItemSelected(item);
+	}
 	
 	public void ajouter(View v)
 	{
 		Intent intention = new Intent(PeriodeActivity.this, PeriodeAddActivity.class);
 		startActivity(intention);
+		this.overridePendingTransition(R.anim.animation_enter_up,
+		        R.anim.animation_leave_up);
+		
 	}
 
 }

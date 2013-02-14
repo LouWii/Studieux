@@ -17,10 +17,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Intent;
+
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -84,6 +87,9 @@ public class PeriodeAddActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_periode_add);
+		
+		//back arrow on action bar
+		getActionBar().setDisplayHomeAsUpEnabled(true);
 		
 		//Database stuff
 		DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "studieux-db", null);
@@ -151,6 +157,19 @@ public class PeriodeAddActivity extends Activity {
 		return true;
 	}
 	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	        case android.R.id.home:
+	            // This is called when the Home (Up) button is pressed
+	            // in the Action Bar.
+	            this.onBackPressed();
+	            return true;
+	    }
+	    return super.onOptionsItemSelected(item);
+	}
+	
+	
 	/**
 	 * Enregistrer la période
 	 * @param vue
@@ -213,4 +232,12 @@ public class PeriodeAddActivity extends Activity {
 		
 	}
 
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		super.onBackPressed();
+		overridePendingTransition(R.anim.animation_back_enter_up,
+                R.anim.animation_back_leave_up);
+}
+	
 }

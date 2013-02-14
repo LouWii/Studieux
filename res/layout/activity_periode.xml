@@ -7,21 +7,11 @@
     <ListView
         android:id="@+id/periodeListView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="3dp"
-        android:layout_marginRight="3dp"
-        android:layout_marginTop="250dp" >
+        android:layout_marginRight="3dp" >
 
     </ListView>
-
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:text="Ajouter" 
-        android:onClick="ajouter" />
 
 </RelativeLayout>

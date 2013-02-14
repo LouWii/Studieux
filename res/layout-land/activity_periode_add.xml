@@ -49,15 +49,6 @@
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/dateDebutEdit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/periodeDebutTV"
-        android:layout_centerHorizontal="true"
-        android:ems="10"
-        android:inputType="date" />
-
-    <EditText
         android:id="@+id/dateFinEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -80,16 +71,24 @@
         android:hint="@string/PeriodeNameHint"
         android:textColorLink="@color/redButtons" />
 
-    <Button
-        android:id="@+id/button1"
+    <EditText
+        android:id="@+id/dateDebutEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/dateFinEdit"
-        android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/dateFinEdit"
-        android:layout_marginBottom="78dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/periodeDebutTV"
+        android:layout_marginLeft="38dp"
+        android:ems="10"
+        android:inputType="date" />
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/dateFinEdit"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="14dp"
         android:onClick="enregistrer"
         android:text="@string/buttonEnregistrer"
-        android:width="150dp" />
+        android:layout_width="200dp" />
 
 </RelativeLayout>
