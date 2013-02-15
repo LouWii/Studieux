@@ -80,8 +80,10 @@ public class MenuActivity extends Activity {
 			intention.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			break;
 		case 1 :
-			 intention = new Intent(MenuActivity.this, PeriodeActivity.class);
-			
+			 intention = new Intent(MenuActivity.this, PeriodeActivity.class);		
+			break;
+		case 2 :
+			intention = new Intent(MenuActivity.this, MatiereActivity.class);
 			break;
 		default:
 			intention = new Intent(MenuActivity.this, CoursActivity.class);

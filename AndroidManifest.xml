@@ -44,7 +44,8 @@
         </activity>
         <activity
             android:name="com.studieux.main.MatiereActivity"
-            android:label="@string/title_activity_matiere" >
+            android:label="@string/title_activity_matiere" 
+            android:theme="@style/MyTheme">
         </activity>
         <activity
             android:name="com.studieux.main.MatiereAdd"

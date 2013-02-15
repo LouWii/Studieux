@@ -34,7 +34,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MatiereActivity extends Activity {
+public class MatiereActivity extends MenuActivity {
 
 	AlertDialog.Builder builder;
 	AlertDialog alertDialog;
@@ -50,6 +50,11 @@ public class MatiereActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_matiere);
+		
+		initMenu();
+		View v1 = findViewById(R.id.viewRed2);
+		v1.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
+		currentButtonIndex = 2;
 	}
 	
 	@Override
