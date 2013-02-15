@@ -227,6 +227,16 @@ public class PeriodeAddActivity extends Activity {
 		{
 			Toast.makeText(PeriodeAddActivity.this, "Periode enregistrée", Toast.LENGTH_SHORT).show();	
 		}
+		else
+		{
+			Toast.makeText(PeriodeAddActivity.this, "Problème lors de l'enregistrement", Toast.LENGTH_SHORT).show();	
+		}
+		
+		daoSession.update(periode);
+		
+		//Toast.makeText(PeriodeAddActivity.this, "pId:" + periode.getId(), Toast.LENGTH_SHORT).show();
+		
+		db.close();
 		
 		finish();
 		

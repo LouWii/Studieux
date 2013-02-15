@@ -45,7 +45,7 @@ public class PeriodeActivity extends MenuActivity {
 		View v1 = findViewById(R.id.viewRed1);
 		v1.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
 		currentButtonIndex = 1;
-		this.updateList();
+		//this.updateList();
         
 	}
 	
@@ -53,12 +53,15 @@ public class PeriodeActivity extends MenuActivity {
 	protected void onResume() {
 		super.onResume();
 		
+		//Toast.makeText(PeriodeActivity.this, "onResume", Toast.LENGTH_SHORT).show();
+		
 		//update la liste lorsqu'on revient sur l'activité
 		this.updateList();
 	}
 	
 	public void updateList()
 	{
+		
 		//Db init
 		DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "studieux-db", null);
         db = helper.getWritableDatabase();

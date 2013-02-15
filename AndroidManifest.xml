@@ -18,10 +18,11 @@
             android:name="com.studieux.main.MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/app_name"
-            android:theme="@style/MyTheme"
-            android:launchMode="singleTask" >
+            android:launchMode="singleTask"
+            android:theme="@style/MyTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -34,8 +35,7 @@
         <activity
             android:name="com.studieux.main.PeriodeActivity"
             android:label="@string/title_activity_periode"
-            android:theme="@style/MyTheme" 
-            >
+            android:theme="@style/MyTheme" >
         </activity>
         <activity
             android:name="com.studieux.main.PeriodeAddActivity"
@@ -45,6 +45,10 @@
         <activity
             android:name="com.studieux.main.MatiereActivity"
             android:label="@string/title_activity_matiere" >
+        </activity>
+        <activity
+            android:name="com.studieux.main.MatiereAdd"
+            android:label="@string/title_activity_matiere_add" >
         </activity>
     </application>
 

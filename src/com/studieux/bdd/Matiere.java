@@ -28,6 +28,7 @@ public class Matiere {
     private Long periode__resolvedKey;
 
     private List<Cours> coursList;
+    private List<Devoir> devoirList;
 
     public Matiere() {
     }
@@ -138,6 +139,23 @@ public class Matiere {
     /** Resets a to-many relationship, making the next get call to query for a fresh result. */
     public synchronized void resetCoursList() {
         coursList = null;
+    }
+
+    /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */
+    public synchronized List<Devoir> getDevoirList() {
+        if (devoirList == null) {
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            DevoirDao targetDao = daoSession.getDevoirDao();
+            devoirList = targetDao._queryMatiere_DevoirList(id);
+        }
+        return devoirList;
+    }
+
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    public synchronized void resetDevoirList() {
+        devoirList = null;
     }
 
     /** Convenient call for {@link AbstractDao#delete(Object)}. Entity must attached to an entity context. */

@@ -9,6 +9,7 @@ import java.util.Map;
 
 import com.studieux.bdd.DaoMaster;
 import com.studieux.bdd.DaoSession;
+import com.studieux.bdd.Periode;
 import com.studieux.bdd.PeriodeDao;
 import com.studieux.bdd.DaoMaster.DevOpenHelper;
 
@@ -20,6 +21,7 @@ import android.app.DialogFragment;
 import android.app.ListFragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnDismissListener;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
@@ -94,18 +96,44 @@ public class MatiereActivity extends Activity {
         	cursor.moveToNext();
         }
         
+        //Toast.makeText(MatiereActivity.this, "lol:" + data.size(), Toast.LENGTH_SHORT).show();	
+        
         //Adapter pour notre listView
         SimpleAdapter adapter = new SimpleAdapter(this, 
         		data,
-        		R.layout.periode_list_item,
+        		R.layout.periodepopup_list_item,
                 from,
                 to);
-        
-		ListFragment newFragment = new PeriodeSellectionDialogFragment(adapter);
-		String tag = "dez";
-		Toast.makeText(MatiereActivity.this, "start frag", Toast.LENGTH_SHORT).show();
-		getFragmentManager().beginTransaction().replace(R.id.matiereMainLayoutContainer , newFragment, tag).commit();
+		final Integer i = -1;
+		PeriodeSelectionDialog dlg = new PeriodeSelectionDialog(MatiereActivity.this, adapter, i);
+		dlg.setTitle("Liste des périodes");
+		dlg.setDialogListener( new MyDialogListener()
+	    {
+		    public void userCanceled()
+		    {
+		    }
+			@Override
+			public void userSelectedAValue(Long value) {
+				// TODO Auto-generated method stub
+				//Toast.makeText(MatiereActivity.this, "id: " + value, Toast.LENGTH_SHORT).show();
+				periodeHasChanged(value);
+			}
+		});
 		
+		dlg.show();
+		
+	}
+	
+	public void periodeHasChanged(Long id)
+	{
+		Periode p = periodeDao.load(id);
+		Toast.makeText(MatiereActivity.this, "id: " + p.getNom(), Toast.LENGTH_SHORT).show();
+	}
+	
+	public static interface MyDialogListener
+	{
+	    public void userSelectedAValue(Long value);
+	    public void userCanceled();
 	}
 
 }
