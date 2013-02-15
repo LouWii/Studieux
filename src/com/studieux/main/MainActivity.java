@@ -1,5 +1,12 @@
 package com.studieux.main;
 
+import com.jjoe64.graphview.BarGraphView;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GraphView.GraphViewData;
+import com.jjoe64.graphview.GraphViewSeries;
+import com.jjoe64.graphview.LineGraphView;
+import com.jjoe64.*;
+
 import android.R.color;
 import android.os.Bundle;
 import android.content.Intent;
@@ -8,6 +15,8 @@ import android.app.DialogFragment;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 public class MainActivity extends MenuActivity {
 	
 	@Override
@@ -18,7 +27,27 @@ public class MainActivity extends MenuActivity {
 		View v1 = findViewById(R.id.viewRed0);
 		v1.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
 		currentButtonIndex = 0;
-  	  	
+ 
+		GraphViewSeries exampleSeries = new GraphViewSeries(new GraphViewData[] {  
+			      new GraphViewData(0, 9.0d)
+			      , new GraphViewData(2, 1.5d)  
+			      , new GraphViewData(3, 14.5d)  
+			      , new GraphViewData(4, 20.0d)
+			      , new GraphViewData(5, 20.0d)  
+			});  
+			
+			GraphView graphView = new BarGraphView(  
+			      this // context  
+			      , "Mes notes" // heading  
+			);  
+			graphView.addSeries(exampleSeries); // data  
+			graphView.setScrollable(true); 
+			graphView.setHorizontalLabels(new String[] {"philo", "AAC", "Voice XML", "Grid"});  
+			// optional - activate scaling / zooming 
+			graphView.setScalable(false);  			
+			LinearLayout layout = (LinearLayout) findViewById(R.id.layoutGraph);  
+			layout.addView(graphView, new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,400)); 
+		
 }
 
 	@Override

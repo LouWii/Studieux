@@ -14,29 +14,8 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@android:color/holo_blue_light"
         android:textColorHint="@android:color/holo_blue_bright"
-        android:textSize="10sp"
+        android:textSize="12sp"
         android:textStyle="italic" />
-
-    <TextView
-        android:id="@+id/periodeFinTV"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/periodeDebutTV"
-        android:layout_alignRight="@+id/dateFinEdit"
-        android:layout_below="@+id/dateDebutEdit"
-        android:layout_marginTop="26dp"
-        android:text="@string/periodeFinText"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/periodeDebutTV"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/dateDebutEdit"
-        android:layout_below="@+id/periodeNameEdit"
-        android:layout_marginTop="22dp"
-        android:text="@string/periodeDebutText"
-        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/nomPeriodeTV"
@@ -44,8 +23,9 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/periodeNameEdit"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="10dp"
         android:text="@string/PeriodeText"
+        android:textSize="24sp"
         android:textStyle="bold" />
 
     <EditText
@@ -59,17 +39,6 @@
 
         <requestFocus />
     </EditText>
-
-    <EditText
-        android:id="@+id/periodeNameEdit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/periodeDebutTV"
-        android:layout_below="@+id/periodeTextExample"
-        android:layout_marginTop="14dp"
-        android:ems="10"
-        android:hint="@string/PeriodeNameHint"
-        android:textColorLink="@color/redButtons" />
 
     <EditText
         android:id="@+id/dateDebutEdit"
@@ -90,5 +59,36 @@
         android:onClick="enregistrer"
         android:text="@string/buttonEnregistrer"
         android:layout_width="200dp" />
+
+    <TextView
+        android:id="@+id/periodeFinTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/dateFinEdit"
+        android:layout_below="@+id/dateDebutEdit"
+        android:layout_marginTop="14dp"
+        android:text="@string/periodeFinText"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/periodeNameEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/periodeDebutTV"
+        android:layout_below="@+id/periodeTextExample"
+        android:ems="10"
+        android:hint="@string/PeriodeNameHint"
+        android:textColorLink="@color/redButtons" />
+
+    <TextView
+        android:id="@+id/periodeDebutTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/dateDebutEdit"
+        android:layout_centerVertical="true"
+        android:text="@string/periodeDebutText"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
 </RelativeLayout>

@@ -14,7 +14,7 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@android:color/holo_blue_light"
         android:textColorHint="@android:color/holo_blue_bright"
-        android:textSize="10sp"
+        android:textSize="12sp"
         android:textStyle="italic" />
 
     <TextView
@@ -26,6 +26,7 @@
         android:layout_below="@+id/dateDebutEdit"
         android:layout_marginTop="26dp"
         android:text="@string/periodeFinText"
+        android:textSize="24sp"
         android:textStyle="bold" />
 
     <TextView
@@ -36,6 +37,7 @@
         android:layout_below="@+id/periodeNameEdit"
         android:layout_marginTop="22dp"
         android:text="@string/periodeDebutText"
+        android:textSize="24sp"
         android:textStyle="bold" />
 
     <TextView
@@ -46,6 +48,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="16dp"
         android:text="@string/PeriodeText"
+        android:textSize="24sp"
         android:textStyle="bold" />
 
     <EditText
