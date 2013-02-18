@@ -92,7 +92,7 @@ public class PeriodeAddActivity extends Activity {
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		
 		//Database stuff
-		DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "studieux-db", null);
+		DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "studieux-db.db", null);
 		db = helper.getWritableDatabase();
         daoMaster = new DaoMaster(db);
         daoSession = daoMaster.newSession();
@@ -130,7 +130,7 @@ public class PeriodeAddActivity extends Activity {
 		super.onStart();
 		
 		Bundle donnees = getIntent().getExtras();
-		if (donnees != null) //si on a passé une ID à l'activité = modification
+		if (donnees != null && donnees.containsKey("id")) //si on a passé une ID à l'activité = modification
 		{
 			DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 			periode = periodeDao.load(donnees.getLong("id"));
