@@ -4,4 +4,85 @@
     android:layout_height="match_parent"
     tools:context=".MatiereAdd" >
 
+    <TextView
+        android:id="@+id/matiere_add_nomMatiereTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="16dp"
+        android:text="@string/MatiereText"
+        android:textSize="@dimen/formulaireLabelBig"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/matiere_add_matiereNameEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/matiere_add_nomMatiereTV"
+        android:layout_marginTop="14dp"
+        android:ems="10"
+        android:hint="@string/MatiereNameHint"
+        android:inputType="textAutoCorrect"
+        android:maxLines="1"
+        android:textColorLink="@color/redButtons" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/matiere_add_matiereNameEdit"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/matiere_add_coefMatiereTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/MatiereCoefficientText"
+            android:textSize="@dimen/formulaireLabelBig"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/matiere_add_matiereCoefEdit"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:ems="10"
+            android:inputType="numberDecimal"
+            android:textColorLink="@color/redButtons" >
+        </EditText>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/matiere_add_matiereNameEdit"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/matiere_add_matiereNameEdit"
+        android:layout_marginBottom="78dp"
+        android:onClick="enregistrer"
+        android:text="@string/buttonEnregistrer"
+        android:width="150dp" />
+
+    <TextView
+        android:id="@+id/matiere_add_periodeName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/linearLayout1"
+        android:layout_marginTop="22dp"
+        android:text=""
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/matiere_add_periodeDates"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/matiere_add_periodeName"
+        android:textColor="#aaaaaa"
+        android:layout_marginLeft="15dp"
+        android:text="" />
+
 </RelativeLayout>

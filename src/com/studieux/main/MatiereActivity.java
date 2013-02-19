@@ -9,6 +9,7 @@ import java.util.Map;
 
 import com.studieux.bdd.DaoMaster;
 import com.studieux.bdd.DaoSession;
+import com.studieux.bdd.Matiere;
 import com.studieux.bdd.Periode;
 import com.studieux.bdd.PeriodeDao;
 import com.studieux.bdd.DaoMaster.DevOpenHelper;
@@ -21,23 +22,32 @@ import android.app.DialogFragment;
 import android.app.ListFragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.DialogInterface.OnDismissListener;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemLongClickListener;
 
 public class MatiereActivity extends MenuActivity {
 
 	AlertDialog.Builder builder;
 	AlertDialog alertDialog;
+	
+	//La période sélectionnée
+	private Periode periode;
+	
+	TextView periodeName;
 	
 	//DB Stuff
 	private Cursor cursor;
@@ -55,6 +65,20 @@ public class MatiereActivity extends MenuActivity {
 		View v1 = findViewById(R.id.viewRed2);
 		v1.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
 		currentButtonIndex = 2;
+		
+		periodeName = (TextView) findViewById(R.id.matiere_periodeName);
+	}
+	
+	@Override
+	protected void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+		
+		//Si une période est sélectionnée
+		if (periode != null)
+		{
+			this.updateList();
+		}
 	}
 	
 	@Override
@@ -67,7 +91,7 @@ public class MatiereActivity extends MenuActivity {
 	public void selectionnerPeriode(View v)
 	{
 		//Db init
-		DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "studieux-db", null);
+		DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "studieux-db.db", null);
         db = helper.getWritableDatabase();
         daoMaster = new DaoMaster(db);
         daoSession = daoMaster.newSession();
@@ -85,7 +109,7 @@ public class MatiereActivity extends MenuActivity {
         //On parse la liste pour convertir les long en Date, avant affichage
         List<Map<String, String>> data = new ArrayList<Map<String, String>>();
         cursor.moveToFirst();
-        while (!cursor.isBeforeFirst() && !cursor.isLast())
+        do
         {
         	//Contient le détail d'une période
         	Map<String, String> datum = new HashMap<String, String>(3);
@@ -99,7 +123,7 @@ public class MatiereActivity extends MenuActivity {
         	
         	data.add(datum);
         	cursor.moveToNext();
-        }
+        } while (cursor.moveToNext());
         
         //Toast.makeText(MatiereActivity.this, "lol:" + data.size(), Toast.LENGTH_SHORT).show();	
         
@@ -131,8 +155,89 @@ public class MatiereActivity extends MenuActivity {
 	
 	public void periodeHasChanged(Long id)
 	{
-		Periode p = periodeDao.load(id);
-		Toast.makeText(MatiereActivity.this, "id: " + p.getNom(), Toast.LENGTH_SHORT).show();
+		this.periode = periodeDao.load(id);
+		//Toast.makeText(MatiereActivity.this, "id: " + periode.getNom(), Toast.LENGTH_SHORT).show();
+		periodeName.setText(periode.getNom());
+		this.updateList();
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	        case android.R.id.home:
+	            // This is called when the Home (Up) button is pressed
+	            // in the Action Bar.
+	            finish();
+	            return true;
+	        case R.id.menu_add:
+	        	this.ajouter(findViewById(R.id.menu_add));
+	        	break;
+	    }
+	    return super.onOptionsItemSelected(item);
+	}
+	
+	public void ajouter(View v)
+	{
+		Intent intention = new Intent(MatiereActivity.this, MatiereAddActivity.class);
+		intention.putExtra("periodeId", periode.getId());
+		startActivity(intention);
+		this.overridePendingTransition(R.anim.animation_enter_up,
+		        R.anim.animation_leave_up);
+		
+	}
+	
+	public void updateList()
+	{
+        
+        //Recupération des periodes en BD
+        String[] from = {"title", "coef"};
+        int[] to = { R.id.matiereListItemNomMatiere , R.id.matiereListItemCoef };
+        //SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.periode_list_item, cursor, from, to, 0);
+        
+        //On parse la liste pour convertir les long en Date, avant affichage
+        List<Map<String, String>> data = new ArrayList<Map<String, String>>();
+        //cursor.moveToFirst();
+        //while (!cursor.isBeforeFirst() && !cursor.isLast())
+        for (Matiere m : periode.getMatiereList())
+        {
+        	//Contient le détail d'une période
+        	Map<String, String> datum = new HashMap<String, String>(3);
+        	datum.put("id", "" + m.getId() );
+        	datum.put("title", m.getNom());
+        	datum.put("coef", "Coef. : " + m.getCoef());
+        	data.add(datum);
+        }
+        //Toast.makeText(MatiereActivity.this, "t: " + data.size(), Toast.LENGTH_SHORT).show();
+        
+        //Adapter pour notre listView
+        SimpleAdapter adapter = new SimpleAdapter(this, 
+        		data,
+        		R.layout.matiere_list_item,
+                from,
+                to);
+        
+        //on récupère la liste on lui affecte l'adapter
+    	ListView listview = (ListView) findViewById(R.id.matiere_listView);
+    	
+    	listview.setAdapter(adapter);
+    	
+    	listview.setOnItemLongClickListener( new OnItemLongClickListener () {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+				// On récupère l'item clické = HashMap<String, String>
+				HashMap<String, String> data = (HashMap<String, String>) arg0.getItemAtPosition(arg2);
+				
+				Intent intention = new Intent(MatiereActivity.this, MatiereAddActivity.class);
+				intention.putExtra( "matiereId", Long.parseLong(data.get("matiereId")) );
+				startActivity(intention);
+				
+				//Toast.makeText(MatiereActivity.this, "id: " + data.get("id"), Toast.LENGTH_SHORT).show();
+				
+				return false;
+			}
+    		
+    	});
 	}
 	
 	public static interface MyDialogListener

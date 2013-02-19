@@ -48,7 +48,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="16dp"
         android:text="@string/PeriodeText"
-        android:textSize="24sp"
+        android:textSize="@dimen/formulaireLabelBig"
         android:textStyle="bold" />
 
     <EditText
@@ -82,14 +82,11 @@
         android:ems="10"
         android:hint="@string/PeriodeNameHint"
         android:textColorLink="@color/redButtons" />
-
     <Button
         android:id="@+id/button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/dateFinEdit"
         android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/dateFinEdit"
         android:layout_marginBottom="78dp"
         android:onClick="enregistrer"
         android:text="@string/buttonEnregistrer"

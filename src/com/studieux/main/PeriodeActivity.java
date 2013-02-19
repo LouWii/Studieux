@@ -44,9 +44,7 @@ public class PeriodeActivity extends MenuActivity {
 		initMenu();
 		View v1 = findViewById(R.id.viewRed1);
 		v1.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
-		currentButtonIndex = 1;
-		//this.updateList();
-        
+		currentButtonIndex = 1;        
 	}
 	
 	@Override
@@ -63,7 +61,7 @@ public class PeriodeActivity extends MenuActivity {
 	{
 		
 		//Db init
-		DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "studieux-db", null);
+		DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "studieux-db.db", null);
         db = helper.getWritableDatabase();
         daoMaster = new DaoMaster(db);
         daoSession = daoMaster.newSession();
@@ -81,7 +79,7 @@ public class PeriodeActivity extends MenuActivity {
         //On parse la liste pour convertir les long en Date, avant affichage
         List<Map<String, String>> data = new ArrayList<Map<String, String>>();
         cursor.moveToFirst();
-        while (!cursor.isBeforeFirst() && !cursor.isLast())
+        do
         {
         	//Contient le détail d'une période
         	Map<String, String> datum = new HashMap<String, String>(3);
@@ -95,7 +93,8 @@ public class PeriodeActivity extends MenuActivity {
         	
         	data.add(datum);
         	cursor.moveToNext();
-        }
+        } while (cursor.moveToNext());
+        //Toast.makeText(PeriodeActivity.this, "t: " + data.size() + ";" + cursor.getCount(), Toast.LENGTH_SHORT).show();
         
         //Adapter pour notre listView
         SimpleAdapter adapter = new SimpleAdapter(this, 

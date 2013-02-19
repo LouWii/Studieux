@@ -48,7 +48,7 @@
             android:theme="@style/MyTheme">
         </activity>
         <activity
-            android:name="com.studieux.main.MatiereAdd"
+            android:name="com.studieux.main.MatiereAddActivity"
             android:label="@string/title_activity_matiere_add" >
         </activity>
     </application>
