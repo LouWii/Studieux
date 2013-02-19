@@ -72,59 +72,63 @@ public class PeriodeActivity extends MenuActivity {
         String orderBy = ddColumn + " COLLATE LOCALIZED ASC";
         cursor = db.query(periodeDao.getTablename(), periodeDao.getAllColumns(), null, null, null, null, orderBy);
         //String[] from = { PeriodeDao.Properties.Nom.columnName, ddColumn, PeriodeDao.Properties.Date_fin.columnName };
-        String[] from = {"title", "date_debut", "date_fin"};
-        int[] to = { R.id.periodeListItemNomPeriode , R.id.periodeListItemDateDebut, R.id.periodeListItemDateFin };
-        //SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.periode_list_item, cursor, from, to, 0);
         
-        //On parse la liste pour convertir les long en Date, avant affichage
-        List<Map<String, String>> data = new ArrayList<Map<String, String>>();
-        cursor.moveToFirst();
-        do
+        if (cursor.getCount() != 0) //si on a des résultats (sinon c'est inutile)
         {
-        	//Contient le détail d'une période
-        	Map<String, String> datum = new HashMap<String, String>(3);
-        	datum.put("id", "" + cursor.getLong(PeriodeDao.Properties.Id.ordinal) );
-        	datum.put("title", cursor.getString(PeriodeDao.Properties.Nom.ordinal));
-        	SimpleDateFormat dateFormater = new SimpleDateFormat("dd MM yyyy");
-        	Date d = new Date(cursor.getLong(PeriodeDao.Properties.Date_debut.ordinal));
-        	datum.put("date_debut", "Date de début : " + dateFormater.format(d));
-        	d = new Date(cursor.getLong(PeriodeDao.Properties.Date_fin.ordinal));
-        	datum.put("date_fin", "Date de fin : " + dateFormater.format(d));
-        	
-        	data.add(datum);
-        	cursor.moveToNext();
-        } while (cursor.moveToNext());
-        //Toast.makeText(PeriodeActivity.this, "t: " + data.size() + ";" + cursor.getCount(), Toast.LENGTH_SHORT).show();
-        
-        //Adapter pour notre listView
-        SimpleAdapter adapter = new SimpleAdapter(this, 
-        		data,
-        		R.layout.periode_list_item,
-                from,
-                to);
-        
-        //on récupère la liste on lui affecte l'adapter
-    	ListView listview = (ListView) findViewById(R.id.periodeListView);
-    	
-    	listview.setAdapter(adapter);
-    	
-    	listview.setOnItemLongClickListener( new OnItemLongClickListener () {
-
-			@Override
-			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				// On récupère l'item clické = HashMap<String, String>
-				HashMap<String, String> data = (HashMap<String, String>) arg0.getItemAtPosition(arg2);
-				
-				Intent intention = new Intent(PeriodeActivity.this, PeriodeAddActivity.class);
-				intention.putExtra( "id", Long.parseLong(data.get("id")) );
-				startActivity(intention);
-				
-				//Toast.makeText(PeriodeActivity.this, "id: " + data.get("id"), Toast.LENGTH_SHORT).show();
-				
-				return false;
-			}
-    		
-    	});
+	        String[] from = {"title", "date_debut", "date_fin"};
+	        int[] to = { R.id.periodeListItemNomPeriode , R.id.periodeListItemDateDebut, R.id.periodeListItemDateFin };
+	        //SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.periode_list_item, cursor, from, to, 0);
+	        
+	        //On parse la liste pour convertir les long en Date, avant affichage
+	        List<Map<String, String>> data = new ArrayList<Map<String, String>>();
+	        cursor.moveToFirst();
+	        do
+	        {
+	        	//Contient le détail d'une période
+	        	Map<String, String> datum = new HashMap<String, String>(3);
+	        	datum.put("id", "" + cursor.getLong(PeriodeDao.Properties.Id.ordinal) );
+	        	datum.put("title", cursor.getString(PeriodeDao.Properties.Nom.ordinal));
+	        	SimpleDateFormat dateFormater = new SimpleDateFormat("dd MM yyyy");
+	        	Date d = new Date(cursor.getLong(PeriodeDao.Properties.Date_debut.ordinal));
+	        	datum.put("date_debut", "Date de début : " + dateFormater.format(d));
+	        	d = new Date(cursor.getLong(PeriodeDao.Properties.Date_fin.ordinal));
+	        	datum.put("date_fin", "Date de fin : " + dateFormater.format(d));
+	        	
+	        	data.add(datum);
+	        	cursor.moveToNext();
+	        } while (cursor.moveToNext());
+	        //Toast.makeText(PeriodeActivity.this, "t: " + data.size() + ";" + cursor.getCount(), Toast.LENGTH_SHORT).show();
+	        
+	        //Adapter pour notre listView
+	        SimpleAdapter adapter = new SimpleAdapter(this, 
+	        		data,
+	        		R.layout.periode_list_item,
+	                from,
+	                to);
+	        
+	        //on récupère la liste on lui affecte l'adapter
+	    	ListView listview = (ListView) findViewById(R.id.periodeListView);
+	    	
+	    	listview.setAdapter(adapter);
+	    	
+	    	listview.setOnItemLongClickListener( new OnItemLongClickListener () {
+	
+				@Override
+				public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+					// On récupère l'item clické = HashMap<String, String>
+					HashMap<String, String> data = (HashMap<String, String>) arg0.getItemAtPosition(arg2);
+					
+					Intent intention = new Intent(PeriodeActivity.this, PeriodeAddActivity.class);
+					intention.putExtra( "id", Long.parseLong(data.get("id")) );
+					startActivity(intention);
+					
+					//Toast.makeText(PeriodeActivity.this, "id: " + data.get("id"), Toast.LENGTH_SHORT).show();
+					
+					return false;
+				}
+	    		
+	    	});
+        }
 	}
 
 	@Override
