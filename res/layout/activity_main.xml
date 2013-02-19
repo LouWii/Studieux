@@ -32,8 +32,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0.5"
             android:gravity="right"
-            android:orientation="vertical" 
-            android:background="#000000">
+            android:orientation="vertical" >
 
             <LinearLayout
                 android:id="@+id/layoutGraph"
@@ -53,24 +52,6 @@
                 android:background="#c1c1c1" />
         </LinearLayout>
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/texthello"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="200dp"
-        android:layout_marginRight="10dp"
-        android:text="@string/hello_world" />
-
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/textView1"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="300dp"
-        android:onClick="toggle"
-        android:text="Clique sur le bouton louis :)" />
 
     <Button
         android:id="@+id/button1"
