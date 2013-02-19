@@ -11,13 +11,13 @@
           android:layout_alignParentTop = "true"> 
 
       </LinearLayout>
+
       <ListView
-        android:id="@+id/periodeSelectListView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp" 
-        android:background="#eee">
+          android:id="@+id/periodeSelectListView"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignParentLeft="true"
+          android:background="#eee" >
+
       </ListView>      
 </RelativeLayout>

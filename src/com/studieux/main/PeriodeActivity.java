@@ -82,7 +82,7 @@ public class PeriodeActivity extends MenuActivity {
 	        //On parse la liste pour convertir les long en Date, avant affichage
 	        List<Map<String, String>> data = new ArrayList<Map<String, String>>();
 	        cursor.moveToFirst();
-	        do
+	        do     
 	        {
 	        	//Contient le détail d'une période
 	        	Map<String, String> datum = new HashMap<String, String>(3);

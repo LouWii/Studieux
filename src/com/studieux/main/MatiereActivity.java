@@ -24,13 +24,17 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.DialogInterface.OnDismissListener;
+import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Point;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -101,55 +105,82 @@ public class MatiereActivity extends MenuActivity {
         String ddColumn = PeriodeDao.Properties.Date_debut.columnName;
         String orderBy = ddColumn + " COLLATE LOCALIZED ASC";
         cursor = db.query(periodeDao.getTablename(), periodeDao.getAllColumns(), null, null, null, null, orderBy);
-        //String[] from = { PeriodeDao.Properties.Nom.columnName, ddColumn, PeriodeDao.Properties.Date_fin.columnName };
-        String[] from = {"title", "date_debut", "date_fin"};
-        int[] to = { R.id.periodeListItemNomPeriode , R.id.periodeListItemDateDebut, R.id.periodeListItemDateFin };
-        //SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.periode_list_item, cursor, from, to, 0);
         
-        //On parse la liste pour convertir les long en Date, avant affichage
-        List<Map<String, String>> data = new ArrayList<Map<String, String>>();
-        cursor.moveToFirst();
-        do
+        if(cursor.getCount() != 0)
         {
-        	//Contient le détail d'une période
-        	Map<String, String> datum = new HashMap<String, String>(3);
-        	datum.put("id", "" + cursor.getLong(PeriodeDao.Properties.Id.ordinal) );
-        	datum.put("title", cursor.getString(PeriodeDao.Properties.Nom.ordinal));
-        	SimpleDateFormat dateFormater = new SimpleDateFormat("dd MM yyyy");
-        	Date d = new Date(cursor.getLong(PeriodeDao.Properties.Date_debut.ordinal));
-        	datum.put("date_debut", "Date de début : " + dateFormater.format(d));
-        	d = new Date(cursor.getLong(PeriodeDao.Properties.Date_fin.ordinal));
-        	datum.put("date_fin", "Date de fin : " + dateFormater.format(d));
-        	
-        	data.add(datum);
-        	cursor.moveToNext();
-        } while (cursor.moveToNext());
+        	//String[] from = { PeriodeDao.Properties.Nom.columnName, ddColumn, PeriodeDao.Properties.Date_fin.columnName };
+            String[] from = {"title", "date_debut", "date_fin"};
+            int[] to = { R.id.periodeListItemNomPeriode , R.id.periodeListItemDateDebut, R.id.periodeListItemDateFin };
+            //SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.periode_list_item, cursor, from, to, 0);
+            
+            //On parse la liste pour convertir les long en Date, avant affichage
+            List<Map<String, String>> data = new ArrayList<Map<String, String>>();
+            cursor.moveToFirst();
+            do
+            {
+            	//Contient le détail d'une période
+            	Map<String, String> datum = new HashMap<String, String>(3);
+            	datum.put("id", "" + cursor.getLong(PeriodeDao.Properties.Id.ordinal) );
+            	datum.put("title", cursor.getString(PeriodeDao.Properties.Nom.ordinal));
+            	SimpleDateFormat dateFormater = new SimpleDateFormat("dd MM yyyy");
+            	Date d = new Date(cursor.getLong(PeriodeDao.Properties.Date_debut.ordinal));
+            	datum.put("date_debut", "Date de début : " + dateFormater.format(d));
+            	d = new Date(cursor.getLong(PeriodeDao.Properties.Date_fin.ordinal));
+            	datum.put("date_fin", "Date de fin : " + dateFormater.format(d));
+            	
+            	data.add(datum);
+            	cursor.moveToNext();
+            } while (cursor.moveToNext());
+            
+            //Toast.makeText(MatiereActivity.this, "lol:" + data.size(), Toast.LENGTH_SHORT).show();	
+            
+            //Adapter pour notre listView
+            SimpleAdapter adapter = new SimpleAdapter(this, 
+            		data,
+            		R.layout.periodepopup_list_item,
+                    from,
+                    to);
+    		final Integer i = -1;
+    		PeriodeSelectionDialog dlg = new PeriodeSelectionDialog(MatiereActivity.this, adapter, i);
+    		dlg.setTitle("Liste des périodes");
+    		dlg.setDialogListener( new MyDialogListener()
+    	    {
+    		    public void userCanceled()
+    		    {
+    		    }
+    			@Override
+    			public void userSelectedAValue(Long value) {
+    				// TODO Auto-generated method stub
+    				//Toast.makeText(MatiereActivity.this, "id: " + value, Toast.LENGTH_SHORT).show();
+    				periodeHasChanged(value);
+    			}
+    		});
+
+//    	    WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+//    	    lp.copyFrom(dlg.getWindow().getAttributes());
+//    	    lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+//    	    lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+//    	    lp.horizontalMargin = 200;
+    	   
+    		dlg.show();
+    		dlg.setOnDismissListener(new OnDismissListener() {
+				
+				@Override
+				public void onDismiss(DialogInterface dialog) {
+					setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+					
+				}
+			});
+    		Display display =((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+    	    Point p = new Point();
+    	    display.getSize(p);
+    		int width = p.x;
+    	    int height=p.y;
+
+    	    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+    	    dlg.getWindow().setLayout((9*width)/10,(9*height)/10);
+        }
         
-        //Toast.makeText(MatiereActivity.this, "lol:" + data.size(), Toast.LENGTH_SHORT).show();	
-        
-        //Adapter pour notre listView
-        SimpleAdapter adapter = new SimpleAdapter(this, 
-        		data,
-        		R.layout.periodepopup_list_item,
-                from,
-                to);
-		final Integer i = -1;
-		PeriodeSelectionDialog dlg = new PeriodeSelectionDialog(MatiereActivity.this, adapter, i);
-		dlg.setTitle("Liste des périodes");
-		dlg.setDialogListener( new MyDialogListener()
-	    {
-		    public void userCanceled()
-		    {
-		    }
-			@Override
-			public void userSelectedAValue(Long value) {
-				// TODO Auto-generated method stub
-				//Toast.makeText(MatiereActivity.this, "id: " + value, Toast.LENGTH_SHORT).show();
-				periodeHasChanged(value);
-			}
-		});
-		
-		dlg.show();
 		
 	}
 	
