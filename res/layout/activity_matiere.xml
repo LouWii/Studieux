@@ -3,31 +3,8 @@
     android:id="@+id/matiereMainLayoutContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:textAlignment="center"
     tools:context=".MatiereActivity" >
-
-    <TextView
-        android:id="@+id/matiere_periodeName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="14dp"
-        android:text="Large Text"
-        android:textAppearance="?android:attr/textAppearanceLarge" 
-        android:onClick="selectionnerPeriode"
-        />
-
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/matiere_periodeName"
-        android:layout_alignBottom="@+id/matiere_periodeName"
-        android:layout_marginLeft="18dp"
-        android:layout_toRightOf="@+id/matiere_periodeName" 
-        android:onClick="selectionnerPeriode"
-        />
 
     <ListView
         android:id="@+id/matiere_listView"
@@ -40,5 +17,38 @@
         android:layout_marginRight="3dp">
 
     </ListView>
+
+    <TextView
+        android:id="@+id/matiereExplications"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:text="Choisissez une période pour voir les matières correspondant à cette période"
+        android:textAlignment="center"
+        android:textColor="@android:color/holo_blue_light" />
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/matiere_periodeName"
+        android:layout_alignBottom="@+id/matiere_periodeName"
+        android:layout_alignLeft="@+id/matiere_listView"
+        android:onClick="selectionnerPeriode"
+        android:text="Choisir" />
+
+    <TextView
+        android:id="@+id/matiere_periodeName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:onClick="selectionnerPeriode"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="@dimen/formulaireLabelBig"
+        android:textStyle="bold" />
 
 </RelativeLayout>
