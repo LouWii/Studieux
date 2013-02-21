@@ -245,7 +245,8 @@ public class MatiereActivity extends MenuActivity {
 	
 	public void updateList()
 	{
-        
+		periode.resetMatiereList();
+		
         //Recupération des periodes en BD
         String[] from = {"title", "coef"};
         int[] to = { R.id.matiereListItemNomMatiere , R.id.matiereListItemCoef };
@@ -264,7 +265,7 @@ public class MatiereActivity extends MenuActivity {
         	datum.put("coef", "Coef. : " + m.getCoef());
         	data.add(datum);
         }
-        //Toast.makeText(MatiereActivity.this, "t: " + data.size(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(MatiereActivity.this, "updtLst: " + data.size(), Toast.LENGTH_SHORT).show();
         
         //Adapter pour notre listView
         SimpleAdapter adapter = new SimpleAdapter(this, 
