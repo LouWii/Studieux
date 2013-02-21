@@ -2,6 +2,7 @@ package com.studieux.main;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +14,8 @@ import com.studieux.bdd.Matiere;
 import com.studieux.bdd.Periode;
 import com.studieux.bdd.PeriodeDao;
 import com.studieux.bdd.DaoMaster.DevOpenHelper;
+
+import de.greenrobot.dao.QueryBuilder;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -76,8 +79,35 @@ public class MatiereActivity extends MenuActivity {
 	
 	@Override
 	protected void onStart() {
-		// TODO Auto-generated method stub
 		super.onStart();
+		
+		//Db init
+		DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "studieux-db.db", null);
+        db = helper.getWritableDatabase();
+        daoMaster = new DaoMaster(db);
+        daoSession = daoMaster.newSession();
+        periodeDao = daoSession.getPeriodeDao();
+		
+		Bundle donnees = getIntent().getExtras();
+		//Si une période est définie
+		if (donnees != null && donnees.containsKey("periodeId"))
+		{
+			periode = periodeDao.load(donnees.getLong("periodeId"));
+		}
+		else //sinon, on cherche la période courante
+		{
+			Date d = new Date();
+			QueryBuilder<Periode> qb = periodeDao.queryBuilder();
+			qb.where(com.studieux.bdd.PeriodeDao.Properties.Date_debut.le(d), com.studieux.bdd.PeriodeDao.Properties.Date_fin.ge(d));
+			List<Periode> periodes = qb.list();
+			
+			if (periodes.size() >= 1)
+			{
+				periode = periodes.get(0);
+				periodeName.setText(periode.getNom());
+				//Toast.makeText(MatiereActivity.this, "lol:" + periode.getNom(), Toast.LENGTH_SHORT).show();
+			}
+		}
 		
 		//Si une période est sélectionnée
 		if (periode != null)
@@ -99,11 +129,6 @@ public class MatiereActivity extends MenuActivity {
 	
 	public void selectionnerPeriode(View v)
 	{
-		//Db init
-		DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "studieux-db.db", null);
-        db = helper.getWritableDatabase();
-        daoMaster = new DaoMaster(db);
-        daoSession = daoMaster.newSession();
         periodeDao = daoSession.getPeriodeDao();
         
         //Recupération des periodes en BD
@@ -135,7 +160,6 @@ public class MatiereActivity extends MenuActivity {
             	datum.put("date_fin", "Date de fin : " + dateFormater.format(d));
             	
             	data.add(datum);
-            	cursor.moveToNext();
             } while (cursor.moveToNext());
             
             //Toast.makeText(MatiereActivity.this, "lol:" + data.size(), Toast.LENGTH_SHORT).show();	
