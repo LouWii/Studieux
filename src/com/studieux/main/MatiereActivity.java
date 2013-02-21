@@ -59,6 +59,7 @@ public class MatiereActivity extends MenuActivity {
 	private DaoMaster daoMaster;
     private DaoSession daoSession;
     private PeriodeDao periodeDao;
+	private Long currentPeriodeId;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -81,9 +82,13 @@ public class MatiereActivity extends MenuActivity {
 		//Si une période est sélectionnée
 		if (periode != null)
 		{
-			this.updateList();
+			this.periodeHasChanged(this.currentPeriodeId);
+			System.out.println(this.currentPeriodeId);
+			System.out.println("fdfdsfsfdsfdsfdsfsdfdsfs");
 		}
 	}
+	
+	
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -108,6 +113,7 @@ public class MatiereActivity extends MenuActivity {
         
         if(cursor.getCount() != 0)
         {
+        	
         	//String[] from = { PeriodeDao.Properties.Nom.columnName, ddColumn, PeriodeDao.Properties.Date_fin.columnName };
             String[] from = {"title", "date_debut", "date_fin"};
             int[] to = { R.id.periodeListItemNomPeriode , R.id.periodeListItemDateDebut, R.id.periodeListItemDateFin };
@@ -153,6 +159,7 @@ public class MatiereActivity extends MenuActivity {
     				// TODO Auto-generated method stub
     				//Toast.makeText(MatiereActivity.this, "id: " + value, Toast.LENGTH_SHORT).show();
     				periodeHasChanged(value);
+    				MatiereActivity.this.currentPeriodeId = value;
     			}
     		});
 
@@ -179,9 +186,7 @@ public class MatiereActivity extends MenuActivity {
 
     	    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
     	    dlg.getWindow().setLayout((9*width)/10,(9*height)/10);
-        }
-        
-		
+        }		
 	}
 	
 	public void periodeHasChanged(Long id)
@@ -229,8 +234,9 @@ public class MatiereActivity extends MenuActivity {
         List<Map<String, String>> data = new ArrayList<Map<String, String>>();
         //cursor.moveToFirst();
         //while (!cursor.isBeforeFirst() && !cursor.isLast())
-        for (Matiere m : periode.getMatiereList())
+        for (Matiere m : this.periode.getMatiereList())
         {
+        	System.out.println(m.getNom());
         	//Contient le détail d'une période
         	Map<String, String> datum = new HashMap<String, String>(3);
         	datum.put("id", "" + m.getId() );
@@ -269,6 +275,15 @@ public class MatiereActivity extends MenuActivity {
 			}
     		
     	});
+    	if(periode.getMatiereList().size()>0)
+    	{
+    		findViewById(R.id.matiereExplications).setAlpha(0.0f);
+    	}
+    	else
+    	{
+    		findViewById(R.id.matiereExplications).setAlpha(1.0f);
+    	}
+    	
 	}
 	
 	public static interface MyDialogListener

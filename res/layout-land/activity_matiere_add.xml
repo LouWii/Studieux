@@ -4,45 +4,6 @@
     android:layout_height="match_parent"
     tools:context=".MatiereAdd" >
 
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/matiere_add_matiereNameEdit"
-        android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/matiere_add_matiereNameEdit"
-        android:layout_marginBottom="78dp"
-        android:onClick="enregistrer"
-        android:text="@string/buttonEnregistrer"
-        android:width="150dp" />
-
-    <EditText
-        android:id="@+id/matiere_add_matiereNameEdit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/matiere_add_nomMatiereTV"
-        android:layout_centerHorizontal="true"
-        android:ems="10"
-        android:hint="@string/MatiereNameHint"
-        android:inputType="textAutoCorrect"
-        android:maxLines="1"
-        android:textColorLink="@color/redButtons" >
-
-        <requestFocus />
-    </EditText>
-
-    <TextView
-        android:id="@+id/matiere_add_nomMatiereTV"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/matiere_add_matiereNameEdit"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="17dp"
-        android:text="@string/MatiereText"
-        android:textSize="@dimen/formulaireLabelBig"
-        android:textStyle="bold" />
-
     <EditText
         android:id="@+id/matiere_add_matiereCoefEdit"
         android:layout_width="60dp"
@@ -74,17 +35,6 @@
         android:textColor="#aaaaaa" />
 
     <TextView
-        android:id="@+id/matiere_add_coefMatiereTV"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/matiere_add_matiereNameEdit"
-        android:layout_below="@+id/matiere_add_matiereNameEdit"
-        android:layout_marginTop="36dp"
-        android:text="@string/MatiereCoefficientText"
-        android:textSize="@dimen/formulaireLabelBig"
-        android:textStyle="bold" />
-
-    <TextView
         android:id="@+id/PeriodeNomTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -94,5 +44,51 @@
         android:text="Période :"
         android:textSize="@dimen/formulaireLabelBig"
         android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/matiere_add_matiereNameEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/matiere_add_nomMatiereTV"
+        android:layout_marginLeft="21dp"
+        android:ems="10"
+        android:hint="@string/MatiereNameHint"
+        android:inputType="textAutoCorrect"
+        android:maxLines="1"
+        android:textColorLink="@color/redButtons" />
+
+    <TextView
+        android:id="@+id/matiere_add_nomMatiereTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/matiere_add_matiereNameEdit"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="17dp"
+        android:text="@string/MatiereText"
+        android:textSize="@dimen/formulaireLabelBig"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/matiere_add_coefMatiereTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/matiere_add_matiereNameEdit"
+        android:layout_below="@+id/matiere_add_matiereNameEdit"
+        android:layout_marginTop="18dp"
+        android:text="@string/MatiereCoefficientText"
+        android:textSize="@dimen/formulaireLabelBig"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/PeriodeNomTV"
+        android:layout_marginRight="16dp"
+        android:onClick="enregistrer"
+        android:text="@string/buttonEnregistrer"
+        android:width="200dp" />
 
 </RelativeLayout>

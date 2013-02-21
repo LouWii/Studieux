@@ -49,6 +49,9 @@ public class MatiereAddActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_matiere_add);
 		
+		//back arrow on action bar
+		 getActionBar().setDisplayHomeAsUpEnabled(true);
+		
 		matiereName = (TextView) findViewById(R.id.matiere_add_matiereNameEdit);
 		matiereCoef = (TextView) findViewById(R.id.matiere_add_matiereCoefEdit);
 		matiereCoef.setText("1.0");
@@ -150,5 +153,14 @@ public class MatiereAddActivity extends Activity {
 		finish();
 		
 	}
+	
+	
+	 @Override
+	 public void onBackPressed() {
+		 // TODO Auto-generated method stub
+		 super.onBackPressed();
+		 overridePendingTransition(R.anim.animation_back_enter_up,
+				 R.anim.animation_back_leave_up);
+	 }
 
 }
