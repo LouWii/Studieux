@@ -90,14 +90,16 @@ public class MatiereActivity extends MenuActivity {
 		
 		Bundle donnees = getIntent().getExtras();
 		//Si une période est définie
-		if (donnees != null && donnees.containsKey("periodeId"))
+		if (periode == null && donnees != null && donnees.containsKey("periodeId"))
 		{
 			periode = periodeDao.load(donnees.getLong("periodeId"));
 		}
-		else //sinon, on cherche la période courante
+		else if (periode == null)//sinon, on cherche la période courante si pas de période
 		{
 			Date d = new Date();
 			QueryBuilder<Periode> qb = periodeDao.queryBuilder();
+			//on récupère les périodes courante (date courant > date_debut et date courante < date_fin)
+			//normalement une seule période doit arriver (on n'autorise pas le chevauchement de périodes)
 			qb.where(com.studieux.bdd.PeriodeDao.Properties.Date_debut.le(d), com.studieux.bdd.PeriodeDao.Properties.Date_fin.ge(d));
 			List<Periode> periodes = qb.list();
 			
