@@ -109,13 +109,7 @@ public class MatiereActivity extends MenuActivity {
 			}
 		}
 		
-		//Si une période est sélectionnée
-		if (periode != null)
-		{
-			this.periodeHasChanged(this.currentPeriodeId);
-			System.out.println(this.currentPeriodeId);
-			System.out.println("fdfdsfsfdsfdsfdsfsdfdsfs");
-		}
+		
 	}
 	
 	
