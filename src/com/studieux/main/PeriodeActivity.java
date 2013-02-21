@@ -95,7 +95,6 @@ public class PeriodeActivity extends MenuActivity {
 	        	datum.put("date_fin", "Date de fin : " + dateFormater.format(d));
 	        	
 	        	data.add(datum);
-	        	cursor.moveToNext();
 	        } while (cursor.moveToNext());
 	        //Toast.makeText(PeriodeActivity.this, "t: " + data.size() + ";" + cursor.getCount(), Toast.LENGTH_SHORT).show();
 	        

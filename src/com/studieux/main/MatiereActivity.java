@@ -129,7 +129,6 @@ public class MatiereActivity extends MenuActivity {
             	datum.put("date_fin", "Date de fin : " + dateFormater.format(d));
             	
             	data.add(datum);
-            	cursor.moveToNext();
             } while (cursor.moveToNext());
             
             //Toast.makeText(MatiereActivity.this, "lol:" + data.size(), Toast.LENGTH_SHORT).show();	
