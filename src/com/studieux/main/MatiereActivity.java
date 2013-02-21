@@ -244,6 +244,7 @@ public class MatiereActivity extends MenuActivity {
 	
 	public void updateList()
 	{
+		//On vide la liste des Matières liées à cette période, pour l'actualiser par la suite
 		periode.resetMatiereList();
 		
         //Recupération des periodes en BD
