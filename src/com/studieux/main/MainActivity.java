@@ -1,5 +1,8 @@
 package com.studieux.main;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import org.achartengine.ChartFactory;
@@ -12,10 +15,19 @@ import org.achartengine.renderer.SimpleSeriesRenderer;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.renderer.XYSeriesRenderer;
 
+import com.studieux.bdd.DaoMaster;
+import com.studieux.bdd.DaoSession;
+import com.studieux.bdd.DevoirDao;
+import com.studieux.bdd.MatiereDao;
+import com.studieux.bdd.NoteDao;
+import com.studieux.bdd.DaoMaster.DevOpenHelper;
+
 import android.R.color;
 import android.os.Bundle;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.app.DialogFragment;
 import android.view.Menu;
@@ -25,34 +37,55 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 public class MainActivity extends MenuActivity {
 
+	//DB stuff
+	private SQLiteDatabase db;
+	private DaoMaster daoMaster;
+	private DaoSession daoSession;
+	private MatiereDao matiereDao;
+	private DevoirDao devoirDao;
+	private NoteDao noteDao;
+
+	private Cursor cursor;
+
+	
+	//graph stuff
+	private XYMultipleSeriesDataset dataset;
+	private XYMultipleSeriesRenderer renderer;
+	private XYSeries series;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		initMenu();
+
 		View v1 = findViewById(R.id.viewRed0);
 		v1.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
 		currentButtonIndex = 0;
+
+		//Database stuff
+		DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "studieux-db.db", null);
+		db = helper.getWritableDatabase();
+		daoMaster = new DaoMaster(db);
+		daoSession = daoMaster.newSession();
+		devoirDao = daoSession.getDevoirDao();
+		matiereDao = daoSession.getMatiereDao();
+		noteDao = daoSession.getNoteDao();
+
 		if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
 		{
 			GraphicalView chartView;
-			XYSeries series ;
 			series = new XYSeries("notes");
-			series.add(1, 2);
-			series.add(2, 20);
-			series.add(3, 5);
-			series.add(4, 15);
-			XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
+			dataset = new XYMultipleSeriesDataset();
+			renderer = getBarDemoRenderer();
+			fillGraphData();
 			dataset.addSeries(series);
-			XYMultipleSeriesRenderer renderer = getBarDemoRenderer();
 			chartView = ChartFactory.getBarChartView(this, dataset,renderer, Type.DEFAULT);
 			setChartSettings(renderer);
-			
+
 			LinearLayout layout = (LinearLayout) findViewById(R.id.layoutGraph);
 			layout.addView(chartView);
 		}
-		
-
 	}
 
 	public XYMultipleSeriesRenderer getBarDemoRenderer() 
@@ -69,10 +102,6 @@ public class MainActivity extends MenuActivity {
 		renderer.setLabelsTextSize(15);
 		renderer.setLegendTextSize(15);
 		renderer.setBarSpacing(0.1);
-		renderer.addXTextLabel(1, "AAC");
-		renderer.addXTextLabel(2, "Mon"); 
-		renderer.addXTextLabel(3, "Tue"); 
-		renderer.addXTextLabel(4, "Wed");
 		renderer.setZoomEnabled(false, false);
 		renderer.setMarginsColor(color.white);
 		renderer.setLabelsColor(Color.BLACK);
@@ -81,7 +110,7 @@ public class MainActivity extends MenuActivity {
 		renderer.setMargins(new int[] {20, 30, 15, 0});
 		SimpleSeriesRenderer r = new SimpleSeriesRenderer();
 		r.setColor(getResources().getColor(android.R.color.holo_blue_light));
-		
+
 		renderer.addSeriesRenderer(r);
 		return renderer;
 	}
@@ -95,6 +124,28 @@ public class MainActivity extends MenuActivity {
 		renderer.setXAxisMax(5);
 		renderer.setYAxisMin(0);
 		renderer.setYAxisMax(24);
+	}
+
+	public void fillGraphData()
+	{
+		noteDao = daoSession.getNoteDao();
+
+		//Recupération des periodes en BD
+		String idColumn = MatiereDao.Properties.Id.columnName;
+		String orderBy = idColumn + " COLLATE LOCALIZED ASC";
+		cursor = db.query(noteDao.getTablename(), noteDao.getAllColumns(), null, null, null, null, orderBy);
+
+		if(cursor.getCount() != 0)
+		{
+			//On parse la liste pour convertir les long en Date, avant affichage
+			List<Map<String, String>> data = new ArrayList<Map<String, String>>();
+			cursor.moveToFirst();
+			do
+			{
+				series.add(cursor.getPosition()+1, cursor.getInt(NoteDao.Properties.Value.ordinal));
+				renderer.addXTextLabel(cursor.getPosition()+1, cursor.getString((NoteDao.Properties.Description.ordinal)));
+			} while (cursor.moveToNext());         
+		}
 	}
 
 	@Override

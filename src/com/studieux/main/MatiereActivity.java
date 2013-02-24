@@ -256,7 +256,6 @@ public class MatiereActivity extends MenuActivity {
         //while (!cursor.isBeforeFirst() && !cursor.isLast())
         for (Matiere m : this.periode.getMatiereList())
         {
-        	System.out.println(m.getNom());
         	//Contient le détail d'une période
         	Map<String, String> datum = new HashMap<String, String>(3);
         	datum.put("id", "" + m.getId() );

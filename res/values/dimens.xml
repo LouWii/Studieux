@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   Copyright 2011 The Android Open Source Project
 
@@ -11,7 +12,7 @@
   distributed under the License is distributed on an "AS IS" BASIS,
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
-  limitations under the License.
+  limitations under the License.
 -->
 
 <resources>
@@ -21,8 +22,10 @@
     <dimen name="shadow_width">30dp</dimen>
 
     <integer name="num_cols">1</integer>
-    <dimen name="list_TitleItem">20sp</dimen>
 
+    <dimen name="list_TitleItem">20sp</dimen>
     <dimen name="formulaireLabelBig">24sp</dimen>
-    
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
 </resources>
