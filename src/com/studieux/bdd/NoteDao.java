@@ -10,6 +10,8 @@ import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.DaoConfig;
 import de.greenrobot.dao.Property;
 import de.greenrobot.dao.SqlUtils;
+import de.greenrobot.dao.Query;
+import de.greenrobot.dao.QueryBuilder;
 
 import com.studieux.bdd.Note;
 
@@ -32,10 +34,12 @@ public class NoteDao extends AbstractDao<Note, Long> {
         public final static Property Quotient = new Property(3, Integer.class, "quotient", false, "QUOTIENT");
         public final static Property Coef = new Property(4, Float.class, "coef", false, "COEF");
         public final static Property DevoirId = new Property(5, Long.class, "devoirId", false, "DEVOIR_ID");
+        public final static Property MatiereId = new Property(6, Long.class, "matiereId", false, "MATIERE_ID");
     };
 
     private DaoSession daoSession;
 
+    private Query<Note> matiere_NoteListQuery;
 
     public NoteDao(DaoConfig config) {
         super(config);
@@ -55,7 +59,8 @@ public class NoteDao extends AbstractDao<Note, Long> {
                 "'VALUE' INTEGER," + // 2: value
                 "'QUOTIENT' INTEGER," + // 3: quotient
                 "'COEF' REAL," + // 4: coef
-                "'DEVOIR_ID' INTEGER);"); // 5: devoirId
+                "'DEVOIR_ID' INTEGER," + // 5: devoirId
+                "'MATIERE_ID' INTEGER);"); // 6: matiereId
     }
 
     /** Drops the underlying database table. */
@@ -98,6 +103,11 @@ public class NoteDao extends AbstractDao<Note, Long> {
         if (devoirId != null) {
             stmt.bindLong(6, devoirId);
         }
+ 
+        Long matiereId = entity.getMatiereId();
+        if (matiereId != null) {
+            stmt.bindLong(7, matiereId);
+        }
     }
 
     @Override
@@ -121,7 +131,8 @@ public class NoteDao extends AbstractDao<Note, Long> {
             cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2), // value
             cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3), // quotient
             cursor.isNull(offset + 4) ? null : cursor.getFloat(offset + 4), // coef
-            cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5) // devoirId
+            cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5), // devoirId
+            cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6) // matiereId
         );
         return entity;
     }
@@ -135,6 +146,7 @@ public class NoteDao extends AbstractDao<Note, Long> {
         entity.setQuotient(cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3));
         entity.setCoef(cursor.isNull(offset + 4) ? null : cursor.getFloat(offset + 4));
         entity.setDevoirId(cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5));
+        entity.setMatiereId(cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6));
      }
     
     /** @inheritdoc */
@@ -160,6 +172,18 @@ public class NoteDao extends AbstractDao<Note, Long> {
         return true;
     }
     
+    /** Internal query to resolve the "noteList" to-many relationship of Matiere. */
+    public synchronized List<Note> _queryMatiere_NoteList(Long matiereId) {
+        if (matiere_NoteListQuery == null) {
+            QueryBuilder<Note> queryBuilder = queryBuilder();
+            queryBuilder.where(Properties.MatiereId.eq(matiereId));
+            matiere_NoteListQuery = queryBuilder.build();
+        } else {
+            matiere_NoteListQuery.setParameter(0, matiereId);
+        }
+        return matiere_NoteListQuery.list();
+    }
+
     private String selectDeep;
 
     protected String getSelectDeep() {
@@ -168,8 +192,11 @@ public class NoteDao extends AbstractDao<Note, Long> {
             SqlUtils.appendColumns(builder, "T", getAllColumns());
             builder.append(',');
             SqlUtils.appendColumns(builder, "T0", daoSession.getDevoirDao().getAllColumns());
+            builder.append(',');
+            SqlUtils.appendColumns(builder, "T1", daoSession.getMatiereDao().getAllColumns());
             builder.append(" FROM NOTE T");
             builder.append(" LEFT JOIN DEVOIR T0 ON T.'DEVOIR_ID'=T0.'_id'");
+            builder.append(" LEFT JOIN MATIERE T1 ON T.'MATIERE_ID'=T1.'_id'");
             builder.append(' ');
             selectDeep = builder.toString();
         }
@@ -182,6 +209,10 @@ public class NoteDao extends AbstractDao<Note, Long> {
 
         Devoir devoir = loadCurrentOther(daoSession.getDevoirDao(), cursor, offset);
         entity.setDevoir(devoir);
+        offset += daoSession.getDevoirDao().getAllColumns().length;
+
+        Matiere matiere = loadCurrentOther(daoSession.getMatiereDao(), cursor, offset);
+        entity.setMatiere(matiere);
 
         return entity;    
     }
