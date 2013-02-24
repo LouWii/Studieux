@@ -29,6 +29,7 @@ public class Matiere {
 
     private List<Cours> coursList;
     private List<Devoir> devoirList;
+    private List<Note> noteList;
 
     public Matiere() {
     }
@@ -156,6 +157,23 @@ public class Matiere {
     /** Resets a to-many relationship, making the next get call to query for a fresh result. */
     public synchronized void resetDevoirList() {
         devoirList = null;
+    }
+
+    /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */
+    public synchronized List<Note> getNoteList() {
+        if (noteList == null) {
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            NoteDao targetDao = daoSession.getNoteDao();
+            noteList = targetDao._queryMatiere_NoteList(id);
+        }
+        return noteList;
+    }
+
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    public synchronized void resetNoteList() {
+        noteList = null;
     }
 
     /** Convenient call for {@link AbstractDao#delete(Object)}. Entity must attached to an entity context. */
