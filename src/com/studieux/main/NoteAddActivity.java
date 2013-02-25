@@ -51,7 +51,8 @@ public class NoteAddActivity extends Activity {
 	private EditText noteValeur;
 	private EditText noteCoeff;
 	private EditText noteQuotient;
-
+	private EditText noteDescription;
+	
 	//DB stuff
 	private SQLiteDatabase db;
 	private DaoMaster daoMaster;
@@ -78,6 +79,7 @@ public class NoteAddActivity extends Activity {
 		this.noteValeur = (EditText) findViewById(R.id.noteET);
 		this.noteCoeff = (EditText) findViewById(R.id.coeffET);
 		this.noteCoeff.setText("1");
+		this.noteDescription = (EditText) findViewById(R.id.descriptionET);
 		this.noteQuotient = (EditText) findViewById(R.id.quotientET);
 		this.noteQuotient.setText("20");
 		this.noteQuotient.setClickable(true);
@@ -209,11 +211,31 @@ public class NoteAddActivity extends Activity {
 			Toast.makeText(NoteAddActivity.this, "Veuillez saisir une valeur numérique comme coefficient " + this.noteQuotient.getText(), Toast.LENGTH_SHORT).show();
 			return;
 		}
+		if(this.matiere == null)
+		{
+			Toast.makeText(NoteAddActivity.this, "Veuillez sélectionner une matière", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		if(this.noteDescription.getText().toString().equals(""))
+		{
+			Toast.makeText(NoteAddActivity.this, "Veuillez entrer une description", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		
 		Note newNote = new Note();
-		newNote.setValue(note);
+		if(Integer.parseInt(this.noteQuotient.getText().toString()) == 10)
+		{
+			newNote.setValue(note*2);
+		}
+		else
+		{
+			newNote.setValue(note);
+		}
+		
 		newNote.setCoef((float)coeff);
 		newNote.setQuotient(Integer.parseInt(this.noteQuotient.getText().toString()));
-		newNote.setDescription("description");
+		newNote.setDescription(this.noteDescription.getText().toString());
+		newNote.setMatiereId(this.matiere.getId());
 		
 		if (noteDao.insert(newNote) != 0 )
 		{
@@ -225,8 +247,6 @@ public class NoteAddActivity extends Activity {
 		}
 		
 		daoSession.update(newNote);
-		
-		//Toast.makeText(PeriodeAddActivity.this, "pId:" + periode.getId(), Toast.LENGTH_SHORT).show();
 		
 		db.close();
 		
