@@ -33,14 +33,16 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Point;
 import android.view.Display;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-
 public class NoteAddActivity extends Activity {
 
 	private Matiere matiere;
@@ -52,7 +54,7 @@ public class NoteAddActivity extends Activity {
 	private EditText noteCoeff;
 	private EditText noteQuotient;
 	private EditText noteDescription;
-	
+
 	//DB stuff
 	private SQLiteDatabase db;
 	private DaoMaster daoMaster;
@@ -114,6 +116,9 @@ public class NoteAddActivity extends Activity {
 		devoirDao = daoSession.getDevoirDao();
 		matiereDao = daoSession.getMatiereDao();
 		noteDao = daoSession.getNoteDao();
+
+		this.addLayoutClickListener();
+
 	}
 
 	@Override
@@ -196,7 +201,7 @@ public class NoteAddActivity extends Activity {
 			Toast.makeText(NoteAddActivity.this, "Veuillez saisir une note comprise entre 0 et " + this.noteQuotient.getText(), Toast.LENGTH_SHORT).show();
 			return;
 		}
-		
+
 		try  
 		{  
 			coeff = Integer.parseInt(this.noteCoeff.getText().toString());  
@@ -221,7 +226,7 @@ public class NoteAddActivity extends Activity {
 			Toast.makeText(NoteAddActivity.this, "Veuillez entrer une description", Toast.LENGTH_SHORT).show();
 			return;
 		}
-		
+
 		Note newNote = new Note();
 		if(Integer.parseInt(this.noteQuotient.getText().toString()) == 10)
 		{
@@ -231,12 +236,12 @@ public class NoteAddActivity extends Activity {
 		{
 			newNote.setValue(note);
 		}
-		
+
 		newNote.setCoef((float)coeff);
 		newNote.setQuotient(Integer.parseInt(this.noteQuotient.getText().toString()));
 		newNote.setDescription(this.noteDescription.getText().toString());
 		newNote.setMatiereId(this.matiere.getId());
-		
+
 		if (noteDao.insert(newNote) != 0 )
 		{
 			Toast.makeText(NoteAddActivity.this, "Note enregistrée", Toast.LENGTH_SHORT).show();	
@@ -245,13 +250,55 @@ public class NoteAddActivity extends Activity {
 		{
 			Toast.makeText(NoteAddActivity.this, "Problème lors de l'enregistrement", Toast.LENGTH_SHORT).show();	
 		}
-		
+
 		daoSession.update(newNote);
-		
+
 		db.close();
-		
+
 		finish();
-		
+
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			// This is called when the Home (Up) button is pressed
+			// in the Action Bar.
+			this.onBackPressed();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+	
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		super.onBackPressed();
+		overridePendingTransition(R.anim.animation_back_enter_up,
+				R.anim.animation_back_leave_up);
+	}
+	
+	//cache le clavier si on clique ailleurs que sur un edittext
+	private void addLayoutClickListener()
+	{
+		RelativeLayout rl = (RelativeLayout) findViewById(R.id.addNoteLayout);
+		rl.setOnClickListener(new android.view.View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				NoteAddActivity.this.hideSoftKeyboard();
+
+			}
+		});
+	}
+	
+	//cache le clavier
+	private void hideSoftKeyboard(){
+		if(getCurrentFocus()!=null && getCurrentFocus() instanceof EditText){
+			InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+			imm.hideSoftInputFromWindow(this.noteDescription.getWindowToken(), 0);
+		}
 	}
 
 }

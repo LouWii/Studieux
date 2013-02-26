@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/addNoteLayout"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -101,16 +102,6 @@
         android:textSize="18sp"
         android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/view2"
-        android:layout_marginBottom="74dp"
-        android:onClick="enregistrer"
-        android:text="Enregistrer" />
-
     <EditText
         android:id="@+id/noteET"
         android:layout_width="wrap_content"
@@ -179,5 +170,16 @@
 
         <requestFocus />
     </EditText>
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/descriptionET"
+        android:layout_marginBottom="94dp"
+        android:layout_toRightOf="@+id/textView7"
+        android:onClick="enregistrer"
+        android:text="Enregistrer" />
 
 </RelativeLayout>

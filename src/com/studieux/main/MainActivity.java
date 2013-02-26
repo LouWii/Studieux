@@ -18,7 +18,9 @@ import org.achartengine.renderer.XYSeriesRenderer;
 import com.studieux.bdd.DaoMaster;
 import com.studieux.bdd.DaoSession;
 import com.studieux.bdd.DevoirDao;
+import com.studieux.bdd.Matiere;
 import com.studieux.bdd.MatiereDao;
+import com.studieux.bdd.Note;
 import com.studieux.bdd.NoteDao;
 import com.studieux.bdd.DaoMaster.DevOpenHelper;
 
@@ -34,6 +36,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.LinearLayout.LayoutParams;
 public class MainActivity extends MenuActivity {
 
@@ -46,7 +49,9 @@ public class MainActivity extends MenuActivity {
 	private NoteDao noteDao;
 
 	private Cursor cursor;
-
+	
+	private Matiere matiere;
+	
 	
 	//graph stuff
 	private XYMultipleSeriesDataset dataset;
@@ -86,8 +91,12 @@ public class MainActivity extends MenuActivity {
 			LinearLayout layout = (LinearLayout) findViewById(R.id.layoutGraph);
 			layout.addView(chartView);
 		}
+		
+		calculMoyenne();
 	}
 
+	
+	
 	public XYMultipleSeriesRenderer getBarDemoRenderer() 
 	{
 		XYMultipleSeriesRenderer renderer = new XYMultipleSeriesRenderer();
@@ -145,6 +154,55 @@ public class MainActivity extends MenuActivity {
 				series.add(cursor.getPosition()+1, cursor.getInt(NoteDao.Properties.Value.ordinal));
 				renderer.addXTextLabel(cursor.getPosition()+1, cursor.getString((NoteDao.Properties.Description.ordinal)));
 			} while (cursor.moveToNext());         
+		}
+	}
+	
+	
+	public void calculMoyenne()
+	{
+		float nbNotes = 0;
+		float total = 0.0f;
+
+		
+		noteDao = daoSession.getNoteDao();
+		matiereDao = daoSession.getMatiereDao(); 
+		//Recupération des matieres en BD
+		cursor = db.query(matiereDao.getTablename(), matiereDao.getAllColumns(), null, null, null, null, null);
+
+		if(cursor.getCount() != 0)
+		{
+			
+			//On parse la liste pour convertir les long en Date, avant affichage
+			List<Map<String, String>> data = new ArrayList<Map<String, String>>();
+			cursor.moveToFirst();
+			do
+			{
+				float nbNotesMatiere = 0;
+				float totalMatiere = 0;
+				matiere = matiereDao.load(cursor.getLong(MatiereDao.Properties.Id.ordinal));
+				for (Note n : matiere.getNoteList())
+				{
+					nbNotesMatiere += n.getCoef();
+					totalMatiere += n.getValue()*n.getCoef();
+				}
+				totalMatiere = totalMatiere / nbNotesMatiere;
+				if(matiere.getNoteList().size()>0)
+				{
+					nbNotes+= matiere.getCoef();
+					total+= totalMatiere*matiere.getCoef();
+				}
+				
+			} while (cursor.moveToNext());         
+		}
+		total = total / (float)nbNotes;
+		TextView tv = (TextView) findViewById(R.id.moyenneET);
+		if(total>0)
+		{
+			tv.setText(""+String.format("%.02f", total));
+		}
+		else
+		{
+			tv.setText("Pas de notes");
 		}
 	}
 
