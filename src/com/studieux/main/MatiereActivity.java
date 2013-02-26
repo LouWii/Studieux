@@ -287,7 +287,7 @@ public class MatiereActivity extends MenuActivity {
 				HashMap<String, String> data = (HashMap<String, String>) arg0.getItemAtPosition(arg2);
 				
 				Intent intention = new Intent(MatiereActivity.this, MatiereAddActivity.class);
-				intention.putExtra( "matiereId", Long.parseLong(data.get("matiereId")) );
+				intention.putExtra( "matiereId", Long.parseLong(data.get("id")) );
 				startActivity(intention);
 				
 				//Toast.makeText(MatiereActivity.this, "id: " + data.get("id"), Toast.LENGTH_SHORT).show();

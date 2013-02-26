@@ -1,7 +1,9 @@
 package com.studieux.main;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -121,6 +123,32 @@ public class NoteAddActivity extends Activity {
 
 	}
 
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
+
+		Bundle donnees = getIntent().getExtras();
+		if (donnees != null && donnees.containsKey("noteId")) //si on a passé une ID à l'activité = modification
+		{
+			System.out.println("totoooo");
+			Note newNote = noteDao.load(donnees.getLong("noteId"));
+			noteValeur.setText(newNote.getValue().toString());
+			noteCoeff.setText(newNote.getCoef().toString());
+			noteQuotient.setText(newNote.getQuotient().toString());
+			this.loadMatiere(newNote.getMatiereId());
+			noteDescription.setText(newNote.getDescription());
+		}
+		else
+		{
+			Calendar prev = Calendar.getInstance();
+			prev.add(Calendar.MONTH, -3);
+			Calendar next = Calendar.getInstance();
+			next.add(Calendar.MONTH, 3);
+
+		}
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -145,7 +173,6 @@ public class NoteAddActivity extends Activity {
 			cursor.moveToFirst();
 			do
 			{
-				System.out.println("ehheheh");
 				noms[cursor.getPosition()] =  cursor.getString(PeriodeDao.Properties.Nom.ordinal);
 				//Contient le détail d'une période
 				Map<String, String> datum = new HashMap<String, String>(3);

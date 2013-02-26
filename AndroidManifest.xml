@@ -61,6 +61,11 @@
             android:label="@string/title_activity_note_add"
             android:theme="@style/MyTheme" >
         </activity>
+        <activity
+            android:name="com.studieux.main.ListeNotesActivity"
+            android:label="@string/title_activity_liste_notes"
+            android:theme="@style/MyTheme" >
+        </activity>
     </application>
 
 </manifest>

@@ -196,6 +196,9 @@ public class NotesActivity extends MenuActivity {
 		renderer.setYAxisMax(24);
 	}
 
+	
+	
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -218,6 +221,14 @@ public class NotesActivity extends MenuActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
+	public void goToNoteList (View v)
+	{
+		Intent intention = new Intent(NotesActivity.this, ListeNotesActivity.class);
+		startActivity(intention);
+		this.overridePendingTransition(R.anim.animation_enter_up,
+				R.anim.animation_leave_up);
+	}
+	
 	public void ajouter(View v)
 	{
 		Intent intention = new Intent(NotesActivity.this, NoteAddActivity.class);
