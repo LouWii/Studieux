@@ -49,15 +49,15 @@ public class MainActivity extends MenuActivity {
 	private NoteDao noteDao;
 
 	private Cursor cursor;
-	
+
 	private Matiere matiere;
-	
-	
+
+
 	//graph stuff
 	private XYMultipleSeriesDataset dataset;
 	private XYMultipleSeriesRenderer renderer;
 	private XYSeries series;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -91,12 +91,12 @@ public class MainActivity extends MenuActivity {
 			LinearLayout layout = (LinearLayout) findViewById(R.id.layoutGraph);
 			layout.addView(chartView);
 		}
-		
+
 		calculMoyenne();
 	}
 
-	
-	
+
+
 	public XYMultipleSeriesRenderer getBarDemoRenderer() 
 	{
 		XYMultipleSeriesRenderer renderer = new XYMultipleSeriesRenderer();
@@ -156,14 +156,14 @@ public class MainActivity extends MenuActivity {
 			} while (cursor.moveToNext());         
 		}
 	}
-	
-	
+
+
 	public void calculMoyenne()
 	{
 		float nbNotes = 0;
 		float total = 0.0f;
 
-		
+
 		noteDao = daoSession.getNoteDao();
 		matiereDao = daoSession.getMatiereDao(); 
 		//Recupération des matieres en BD
@@ -171,7 +171,7 @@ public class MainActivity extends MenuActivity {
 
 		if(cursor.getCount() != 0)
 		{
-			
+
 			//On parse la liste pour convertir les long en Date, avant affichage
 			List<Map<String, String>> data = new ArrayList<Map<String, String>>();
 			cursor.moveToFirst();
@@ -191,7 +191,7 @@ public class MainActivity extends MenuActivity {
 					nbNotes+= matiere.getCoef();
 					total+= totalMatiere*matiere.getCoef();
 				}
-				
+
 			} while (cursor.moveToNext());         
 		}
 		total = total / (float)nbNotes;
@@ -222,6 +222,15 @@ public class MainActivity extends MenuActivity {
 		//newFragment.show(getFragmentManager(), "ih");
 		//String tag = "dez";
 		//newFragment.show(getFragmentManager(), tag);
+	}
+
+	public void goToNotes(View v)
+	{
+		Intent intention = new Intent(MainActivity.this, NotesActivity.class);
+		startActivity(intention);
+		this.overridePendingTransition(R.anim.animation_enter,
+				R.anim.animation_leave);
+
 	}
 
 	@Override

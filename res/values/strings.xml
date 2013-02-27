@@ -30,4 +30,6 @@
     
     <!--  Ecran ajout d'un cours -->
 	<string name="CoursAddtypecourshint">Amphi, TD, TP...</string>
+    <string name="title_activity_liste_notes">ListeNotesActivity</string>
+
 </resources>
