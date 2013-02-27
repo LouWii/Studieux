@@ -185,11 +185,11 @@ public class NoteAddActivity extends Activity {
 
 	public void enregistrer(View v)
 	{
-		int note;
+		Float note;
 		int coeff;
 		try  
 		{  
-			note = Integer.parseInt(this.noteValeur.getText().toString());  
+			note = Float.parseFloat(this.noteValeur.getText().toString());  
 			if(note > Integer.parseInt(this.noteQuotient.getText().toString()) || note < 0)
 			{
 				Toast.makeText(NoteAddActivity.this, "Veuillez saisir une note comprise entre 0 et " + this.noteQuotient.getText(), Toast.LENGTH_SHORT).show();

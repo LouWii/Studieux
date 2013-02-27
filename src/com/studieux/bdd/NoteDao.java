@@ -30,7 +30,7 @@ public class NoteDao extends AbstractDao<Note, Long> {
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Description = new Property(1, String.class, "description", false, "DESCRIPTION");
-        public final static Property Value = new Property(2, Integer.class, "value", false, "VALUE");
+        public final static Property Value = new Property(2, Float.class, "value", false, "VALUE");
         public final static Property Quotient = new Property(3, Integer.class, "quotient", false, "QUOTIENT");
         public final static Property Coef = new Property(4, Float.class, "coef", false, "COEF");
         public final static Property DevoirId = new Property(5, Long.class, "devoirId", false, "DEVOIR_ID");
@@ -56,7 +56,7 @@ public class NoteDao extends AbstractDao<Note, Long> {
         db.execSQL("CREATE TABLE " + constraint + "'NOTE' (" + //
                 "'_id' INTEGER PRIMARY KEY ," + // 0: id
                 "'DESCRIPTION' TEXT," + // 1: description
-                "'VALUE' INTEGER," + // 2: value
+                "'VALUE' REAL," + // 2: value
                 "'QUOTIENT' INTEGER," + // 3: quotient
                 "'COEF' REAL," + // 4: coef
                 "'DEVOIR_ID' INTEGER," + // 5: devoirId
@@ -84,9 +84,9 @@ public class NoteDao extends AbstractDao<Note, Long> {
             stmt.bindString(2, description);
         }
  
-        Integer value = entity.getValue();
+        Float value = entity.getValue();
         if (value != null) {
-            stmt.bindLong(3, value);
+            stmt.bindDouble(3, value);
         }
  
         Integer quotient = entity.getQuotient();
@@ -128,7 +128,7 @@ public class NoteDao extends AbstractDao<Note, Long> {
         Note entity = new Note( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // description
-            cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2), // value
+            cursor.isNull(offset + 2) ? null : cursor.getFloat(offset + 2), // value
             cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3), // quotient
             cursor.isNull(offset + 4) ? null : cursor.getFloat(offset + 4), // coef
             cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5), // devoirId
@@ -142,7 +142,7 @@ public class NoteDao extends AbstractDao<Note, Long> {
     public void readEntity(Cursor cursor, Note entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setDescription(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setValue(cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2));
+        entity.setValue(cursor.isNull(offset + 2) ? null : cursor.getFloat(offset + 2));
         entity.setQuotient(cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3));
         entity.setCoef(cursor.isNull(offset + 4) ? null : cursor.getFloat(offset + 4));
         entity.setDevoirId(cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5));

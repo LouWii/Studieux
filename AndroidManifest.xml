@@ -61,6 +61,10 @@
             android:label="@string/title_activity_note_add"
             android:theme="@style/MyTheme" >
         </activity>
+        <activity
+            android:name="com.studieux.main.CoursAddActivity"
+            android:label="@string/title_activity_cours_add" >
+        </activity>
     </application>
 
 </manifest>

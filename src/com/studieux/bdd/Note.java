@@ -11,7 +11,7 @@ public class Note {
 
     private Long id;
     private String description;
-    private Integer value;
+    private Float value;
     private Integer quotient;
     private Float coef;
     private Long devoirId;
@@ -37,7 +37,7 @@ public class Note {
         this.id = id;
     }
 
-    public Note(Long id, String description, Integer value, Integer quotient, Float coef, Long devoirId, Long matiereId) {
+    public Note(Long id, String description, Float value, Integer quotient, Float coef, Long devoirId, Long matiereId) {
         this.id = id;
         this.description = description;
         this.value = value;
@@ -69,11 +69,11 @@ public class Note {
         this.description = description;
     }
 
-    public Integer getValue() {
+    public Float getValue() {
         return value;
     }
 
-    public void setValue(Integer value) {
+    public void setValue(Float value) {
         this.value = value;
     }
 

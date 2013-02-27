@@ -29,14 +29,15 @@ public class CoursDao extends AbstractDao<Cours, Long> {
     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Nom = new Property(1, String.class, "nom", false, "NOM");
-        public final static Property Type = new Property(2, String.class, "type", false, "TYPE");
-        public final static Property Jour = new Property(3, int.class, "jour", false, "JOUR");
-        public final static Property Date_debut = new Property(4, java.util.Date.class, "date_debut", false, "DATE_DEBUT");
-        public final static Property Date_fin = new Property(5, java.util.Date.class, "date_fin", false, "DATE_FIN");
-        public final static Property Heure_debut = new Property(6, long.class, "heure_debut", false, "HEURE_DEBUT");
-        public final static Property Heure_fin = new Property(7, long.class, "heure_fin", false, "HEURE_FIN");
-        public final static Property MatiereId = new Property(8, long.class, "matiereId", false, "MATIERE_ID");
+        public final static Property Type = new Property(1, String.class, "type", false, "TYPE");
+        public final static Property Jour = new Property(2, int.class, "jour", false, "JOUR");
+        public final static Property Salle = new Property(3, String.class, "salle", false, "SALLE");
+        public final static Property Semaine = new Property(4, Integer.class, "semaine", false, "SEMAINE");
+        public final static Property Date_debut = new Property(5, java.util.Date.class, "date_debut", false, "DATE_DEBUT");
+        public final static Property Date_fin = new Property(6, java.util.Date.class, "date_fin", false, "DATE_FIN");
+        public final static Property Heure_debut = new Property(7, long.class, "heure_debut", false, "HEURE_DEBUT");
+        public final static Property Heure_fin = new Property(8, long.class, "heure_fin", false, "HEURE_FIN");
+        public final static Property MatiereId = new Property(9, long.class, "matiereId", false, "MATIERE_ID");
     };
 
     private DaoSession daoSession;
@@ -57,14 +58,15 @@ public class CoursDao extends AbstractDao<Cours, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "'COURS' (" + //
                 "'_id' INTEGER PRIMARY KEY ," + // 0: id
-                "'NOM' TEXT NOT NULL ," + // 1: nom
-                "'TYPE' TEXT," + // 2: type
-                "'JOUR' INTEGER NOT NULL ," + // 3: jour
-                "'DATE_DEBUT' INTEGER NOT NULL ," + // 4: date_debut
-                "'DATE_FIN' INTEGER NOT NULL ," + // 5: date_fin
-                "'HEURE_DEBUT' INTEGER NOT NULL ," + // 6: heure_debut
-                "'HEURE_FIN' INTEGER NOT NULL ," + // 7: heure_fin
-                "'MATIERE_ID' INTEGER NOT NULL );"); // 8: matiereId
+                "'TYPE' TEXT NOT NULL ," + // 1: type
+                "'JOUR' INTEGER NOT NULL ," + // 2: jour
+                "'SALLE' TEXT," + // 3: salle
+                "'SEMAINE' INTEGER," + // 4: semaine
+                "'DATE_DEBUT' INTEGER NOT NULL ," + // 5: date_debut
+                "'DATE_FIN' INTEGER NOT NULL ," + // 6: date_fin
+                "'HEURE_DEBUT' INTEGER NOT NULL ," + // 7: heure_debut
+                "'HEURE_FIN' INTEGER NOT NULL ," + // 8: heure_fin
+                "'MATIERE_ID' INTEGER NOT NULL );"); // 9: matiereId
     }
 
     /** Drops the underlying database table. */
@@ -82,18 +84,23 @@ public class CoursDao extends AbstractDao<Cours, Long> {
         if (id != null) {
             stmt.bindLong(1, id);
         }
-        stmt.bindString(2, entity.getNom());
+        stmt.bindString(2, entity.getType());
+        stmt.bindLong(3, entity.getJour());
  
-        String type = entity.getType();
-        if (type != null) {
-            stmt.bindString(3, type);
+        String salle = entity.getSalle();
+        if (salle != null) {
+            stmt.bindString(4, salle);
         }
-        stmt.bindLong(4, entity.getJour());
-        stmt.bindLong(5, entity.getDate_debut().getTime());
-        stmt.bindLong(6, entity.getDate_fin().getTime());
-        stmt.bindLong(7, entity.getHeure_debut());
-        stmt.bindLong(8, entity.getHeure_fin());
-        stmt.bindLong(9, entity.getMatiereId());
+ 
+        Integer semaine = entity.getSemaine();
+        if (semaine != null) {
+            stmt.bindLong(5, semaine);
+        }
+        stmt.bindLong(6, entity.getDate_debut().getTime());
+        stmt.bindLong(7, entity.getDate_fin().getTime());
+        stmt.bindLong(8, entity.getHeure_debut());
+        stmt.bindLong(9, entity.getHeure_fin());
+        stmt.bindLong(10, entity.getMatiereId());
     }
 
     @Override
@@ -113,14 +120,15 @@ public class CoursDao extends AbstractDao<Cours, Long> {
     public Cours readEntity(Cursor cursor, int offset) {
         Cours entity = new Cours( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.getString(offset + 1), // nom
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // type
-            cursor.getInt(offset + 3), // jour
-            new java.util.Date(cursor.getLong(offset + 4)), // date_debut
-            new java.util.Date(cursor.getLong(offset + 5)), // date_fin
-            cursor.getLong(offset + 6), // heure_debut
-            cursor.getLong(offset + 7), // heure_fin
-            cursor.getLong(offset + 8) // matiereId
+            cursor.getString(offset + 1), // type
+            cursor.getInt(offset + 2), // jour
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // salle
+            cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4), // semaine
+            new java.util.Date(cursor.getLong(offset + 5)), // date_debut
+            new java.util.Date(cursor.getLong(offset + 6)), // date_fin
+            cursor.getLong(offset + 7), // heure_debut
+            cursor.getLong(offset + 8), // heure_fin
+            cursor.getLong(offset + 9) // matiereId
         );
         return entity;
     }
@@ -129,14 +137,15 @@ public class CoursDao extends AbstractDao<Cours, Long> {
     @Override
     public void readEntity(Cursor cursor, Cours entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setNom(cursor.getString(offset + 1));
-        entity.setType(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setJour(cursor.getInt(offset + 3));
-        entity.setDate_debut(new java.util.Date(cursor.getLong(offset + 4)));
-        entity.setDate_fin(new java.util.Date(cursor.getLong(offset + 5)));
-        entity.setHeure_debut(cursor.getLong(offset + 6));
-        entity.setHeure_fin(cursor.getLong(offset + 7));
-        entity.setMatiereId(cursor.getLong(offset + 8));
+        entity.setType(cursor.getString(offset + 1));
+        entity.setJour(cursor.getInt(offset + 2));
+        entity.setSalle(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setSemaine(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));
+        entity.setDate_debut(new java.util.Date(cursor.getLong(offset + 5)));
+        entity.setDate_fin(new java.util.Date(cursor.getLong(offset + 6)));
+        entity.setHeure_debut(cursor.getLong(offset + 7));
+        entity.setHeure_fin(cursor.getLong(offset + 8));
+        entity.setMatiereId(cursor.getLong(offset + 9));
      }
     
     /** @inheritdoc */

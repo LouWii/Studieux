@@ -136,6 +136,7 @@ public class PeriodeActivity extends MenuActivity {
 		getMenuInflater().inflate(R.menu.activity_periode, menu);
 		return true;
 	}
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {

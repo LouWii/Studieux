@@ -11,9 +11,10 @@ public class Cours {
 
     private Long id;
     /** Not-null value. */
-    private String nom;
     private String type;
     private int jour;
+    private String salle;
+    private Integer semaine;
     /** Not-null value. */
     private java.util.Date date_debut;
     /** Not-null value. */
@@ -39,11 +40,12 @@ public class Cours {
         this.id = id;
     }
 
-    public Cours(Long id, String nom, String type, int jour, java.util.Date date_debut, java.util.Date date_fin, long heure_debut, long heure_fin, long matiereId) {
+    public Cours(Long id, String type, int jour, String salle, Integer semaine, java.util.Date date_debut, java.util.Date date_fin, long heure_debut, long heure_fin, long matiereId) {
         this.id = id;
-        this.nom = nom;
         this.type = type;
         this.jour = jour;
+        this.salle = salle;
+        this.semaine = semaine;
         this.date_debut = date_debut;
         this.date_fin = date_fin;
         this.heure_debut = heure_debut;
@@ -66,19 +68,11 @@ public class Cours {
     }
 
     /** Not-null value. */
-    public String getNom() {
-        return nom;
-    }
-
-    /** Not-null value; ensure this value is available before it is saved to the database. */
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-
     public String getType() {
         return type;
     }
 
+    /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setType(String type) {
         this.type = type;
     }
@@ -89,6 +83,22 @@ public class Cours {
 
     public void setJour(int jour) {
         this.jour = jour;
+    }
+
+    public String getSalle() {
+        return salle;
+    }
+
+    public void setSalle(String salle) {
+        this.salle = salle;
+    }
+
+    public Integer getSemaine() {
+        return semaine;
+    }
+
+    public void setSemaine(Integer semaine) {
+        this.semaine = semaine;
     }
 
     /** Not-null value. */

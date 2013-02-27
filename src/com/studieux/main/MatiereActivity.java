@@ -39,6 +39,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -81,12 +82,14 @@ public class MatiereActivity extends MenuActivity {
 	protected void onStart() {
 		super.onStart();
 		
-		//Db init
-		DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "studieux-db.db", null);
-        db = helper.getWritableDatabase();
-        daoMaster = new DaoMaster(db);
-        daoSession = daoMaster.newSession();
-        periodeDao = daoSession.getPeriodeDao();
+		if (periodeDao == null)//Db init
+		{
+			DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "studieux-db.db", null);
+		    db = helper.getWritableDatabase();
+		    daoMaster = new DaoMaster(db);
+		    daoSession = daoMaster.newSession();
+		    periodeDao = daoSession.getPeriodeDao();
+		}
 		
 		Bundle donnees = getIntent().getExtras();
 		//Si une période est définie
@@ -111,7 +114,10 @@ public class MatiereActivity extends MenuActivity {
 			}
 		}
 		
-		
+		if (periode != null)
+		{
+			this.updateList();
+		}
 	}
 	
 	
@@ -265,7 +271,7 @@ public class MatiereActivity extends MenuActivity {
         	datum.put("coef", "Coef. : " + m.getCoef());
         	data.add(datum);
         }
-        Toast.makeText(MatiereActivity.this, "updtLst: " + data.size(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(MatiereActivity.this, "updtLst: " + data.size(), Toast.LENGTH_SHORT).show();
         
         //Adapter pour notre listView
         SimpleAdapter adapter = new SimpleAdapter(this, 
@@ -287,7 +293,7 @@ public class MatiereActivity extends MenuActivity {
 				HashMap<String, String> data = (HashMap<String, String>) arg0.getItemAtPosition(arg2);
 				
 				Intent intention = new Intent(MatiereActivity.this, MatiereAddActivity.class);
-				intention.putExtra( "matiereId", Long.parseLong(data.get("matiereId")) );
+				intention.putExtra( "matiereId", Long.parseLong(data.get("id")) );
 				startActivity(intention);
 				
 				//Toast.makeText(MatiereActivity.this, "id: " + data.get("id"), Toast.LENGTH_SHORT).show();
@@ -296,6 +302,20 @@ public class MatiereActivity extends MenuActivity {
 			}
     		
     	});
+    	
+    	listview.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+				// On récupère l'item clické = HashMap<String, String>
+				HashMap<String, String> data = (HashMap<String, String>) arg0.getItemAtPosition(arg2);
+				
+				Intent intention = new Intent(MatiereActivity.this, CoursActivity.class);
+				intention.putExtra( "matiereId", Long.parseLong(data.get("id")) );
+				startActivity(intention);
+			}
+		});
+    	
     	if(periode.getMatiereList().size()>0)
     	{
     		findViewById(R.id.matiereExplications).setAlpha(0.0f);
