@@ -62,7 +62,7 @@ public class CoursActivity extends MenuActivity {
 		{
 			matiere = matiereDao.load(donnees.getLong("matiereId"));
 			TextView nomMatiere = (TextView) findViewById(R.id.cours_matierenom);
-			nomMatiere.setText(matiere.getNom());
+			nomMatiere.setText("Cours de : "  + matiere.getNom());
 		}
 		else if (matiere == null)//sinon, on cherche la période courante si pas de période
 		{

@@ -8,6 +8,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
+import com.studieux.bdd.Cours;
+import com.studieux.bdd.CoursDao;
 import com.studieux.bdd.DaoMaster;
 import com.studieux.bdd.DaoSession;
 import com.studieux.bdd.Matiere;
@@ -59,6 +61,7 @@ public class CoursAddActivity extends MenuActivity {
     private DaoSession daoSession;
     private PeriodeDao periodeDao;
     private MatiereDao matiereDao;
+    private CoursDao coursDAO;
     private Matiere matiere;
     private Periode periode;
 	
@@ -91,6 +94,7 @@ public class CoursAddActivity extends MenuActivity {
 		    daoMaster = new DaoMaster(db);
 		    daoSession = daoMaster.newSession();
 		    matiereDao = daoSession.getMatiereDao();
+		    coursDAO = daoSession.getCoursDao();
 		}
 		
 		Bundle donnees = getIntent().getExtras();
@@ -349,6 +353,34 @@ public class CoursAddActivity extends MenuActivity {
 			.show();
 			return;
 		}
+		
+		Cours c = new Cours();
+		c.setMatiere(matiere);
+		c.setType(lieu.getText().toString());
+		c.setSalle(lieu.getText().toString());
+		c.setJour(jourSelectionne);
+		c.setDate_debut(dateDebutDate);
+		c.setDate_fin(dateFinDate);
+		c.setSemaine(0);
+		c.setHeure_debut(heureDebut.getTime().getTime()); //les heures sont stockées en LONG.
+		c.setHeure_fin(heureFin.getTime().getTime());
+		
+		if (coursDAO.insert(c) != 0 )
+		{
+			Toast.makeText(CoursAddActivity.this, "Cours enregistrée", Toast.LENGTH_SHORT).show();	
+		}
+		else
+		{
+			Toast.makeText(CoursAddActivity.this, "Problème lors de l'enregistrement", Toast.LENGTH_SHORT).show();	
+		}
+
+		daoSession.update(c);
+
+		//Toast.makeText(PeriodeAddActivity.this, "pId:" + periode.getId(), Toast.LENGTH_SHORT).show();
+
+		db.close();
+
+		finish();
 	}
 
 
