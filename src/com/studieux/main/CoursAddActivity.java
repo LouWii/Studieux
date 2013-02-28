@@ -1,6 +1,7 @@
 package com.studieux.main;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -23,6 +24,7 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
@@ -144,6 +146,13 @@ public class CoursAddActivity extends MenuActivity {
 					return false;  
 				}
 			});
+			formatter = new SimpleDateFormat("HH:mm");
+			heureDebut = Calendar.getInstance();
+			heureDebut.set(1, 1, 1, 9, 0);
+			heureDebutET.setText(formatter.format(heureDebut.getTime()));
+			heureFin = Calendar.getInstance();
+			heureFin.set(1, 1, 1, 10, 0);
+			heureFinET.setText(formatter.format(heureFin.getTime()));
 			//TextView nomMatiere = (TextView) findViewById(R.id.cours_matierenom);
 			//nomMatiere.setText(matiere.getNom());
 		}
@@ -166,15 +175,15 @@ public class CoursAddActivity extends MenuActivity {
 		case DATEFIN_DIALOG_ID:
 			return new DatePickerDialog(this,  mDateFinSetListener,  c2.get(Calendar.YEAR), c2.get(Calendar.MONTH), c2.get(Calendar.DAY_OF_MONTH));
 		case HEUREDEBUT_DIALOG_ID:
-			return new TimePickerDialog(this, mHeureDebutSetListener, 8, 0, true);
+			return new TimePickerDialog(this, mHeureDebutSetListener, 9, 0, true);
 		case HEUREFIN_DIALOG_ID:
-			return new TimePickerDialog(this, mHeureFinSetListener, 12, 0, true);
+			return new TimePickerDialog(this, mHeureFinSetListener, 10, 0, true);
 		}
 		return null;
 	}
 	
 	/**
-	 * Date picker pour la date de début
+	 * Listener Date picker pour la date de début
 	 */
 	private DatePickerDialog.OnDateSetListener mDateDebutSetListener = new DatePickerDialog.OnDateSetListener() {
 		// onDateSet method
@@ -186,7 +195,7 @@ public class CoursAddActivity extends MenuActivity {
 	};
 
 	/**
-	 * Date picker pour la date de fin
+	 * Listener Date picker pour la date de fin
 	 */
 	private DatePickerDialog.OnDateSetListener mDateFinSetListener = new DatePickerDialog.OnDateSetListener() {
 		// onDateSet method
@@ -196,26 +205,39 @@ public class CoursAddActivity extends MenuActivity {
 		}
 	};
 	
+	/**
+	 * Listener Date picker pour le l'heure de début
+	 */
 	private TimePickerDialog.OnTimeSetListener mHeureDebutSetListener = new TimePickerDialog.OnTimeSetListener() {
 		
 		@Override
 		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 			heureDebut = Calendar.getInstance();
 			heureDebut.set(1, 1, 1, hourOfDay, minute);
-			
+			DateFormat formatter = new SimpleDateFormat("HH:mm");
+			heureDebutET.setText(formatter.format(heureDebut.getTime()));
 		}
 	};
 	
+	/**
+	 * Listener Date picker pour l'heure de fin
+	 */
 	private TimePickerDialog.OnTimeSetListener mHeureFinSetListener = new TimePickerDialog.OnTimeSetListener() {
 		
 		@Override
 		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 			heureFin = Calendar.getInstance();
 			heureFin.set(1, 1, 1, hourOfDay, minute);
-			
+			DateFormat formatter = new SimpleDateFormat("HH:mm");
+			heureFinET.setText(formatter.format(heureFin.getTime()));
 		}
 	};
 	
+	/**
+	 * Appui sur le bouton pour sélectionner un jour
+	 * Affichage de la popup
+	 * @param v
+	 */
 	public void selectionnerJour(View v)
 	{
 		if (noms == null)
@@ -242,10 +264,91 @@ public class CoursAddActivity extends MenuActivity {
 				TextView jour = (TextView)findViewById(R.id.coursadd_jour);
 				jour.setText(noms[which]);
 			}
-
 		});
 		builder.create();         
 		builder.show();	
+	}
+	
+	/**
+	 * Enregistrement du cours
+	 * @param v
+	 */
+	public void enregistrer(View v)
+	{
+		//Si le type est vide, on alerte et on stoppe l'enregistrement
+		TextView type = (TextView)findViewById(R.id.coursadd_courstype);
+		if (type.getText().toString().equals("") )
+		{
+			new AlertDialog.Builder(this).setTitle("Type vide")
+			.setMessage("Veuillez entrer un type pour le cours (amphi, TP, TD...)")
+			.setPositiveButton("OK", null)
+			.show();
+			return;
+		}
+		
+		//Si le type est vide, on alerte et on stoppe l'enregistrement
+		TextView lieu = (TextView)findViewById(R.id.coursadd_courssalle);
+		if (lieu.getText().toString().equals("") )
+		{
+			new AlertDialog.Builder(this).setTitle("Lieu vide")
+			.setMessage("Veuillez entrer un lieu pour le cours (bât. 3 Salle A5 par exemple)")
+			.setPositiveButton("OK", null)
+			.show();
+			return;
+		}
+		
+		//control si un jour est bien sélectionné
+		if (jourSelectionne==-1)
+		{
+			new AlertDialog.Builder(this).setTitle("Pas de jour sélectionné")
+			.setMessage("Veuillez sélectionner le jour où a lieu ce cours.")
+			.setPositiveButton("OK", null)
+			.show();
+			return;
+		}
+		
+		//Création des dates avec le format donné
+		DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");		
+		Date dateFinDate = null;
+		Date dateDebutDate = null;
+
+		try {
+			dateDebutDate = formatter.parse(this.dateDebutET.getText().toString());
+
+			dateFinDate = formatter.parse(this.dateFinET.getText().toString());
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Log.e("Erreur perso", "Erreur du cast de String en Date. " + e.getMessage());
+		}
+
+		//controle des dates
+		if (dateDebutDate!= null && dateFinDate != null)
+		{
+			if (dateDebutDate.after(dateFinDate) )
+			{
+				new AlertDialog.Builder(this).setTitle("Dates incorrectes")
+				.setMessage("Veuillez entrer un date de début supérieure à la date de fin")
+				.setPositiveButton("OK", null)
+				.show();
+				return;
+			}
+		}
+		else
+		{
+
+			return;
+		}
+		
+		//controle des heures
+		if (heureDebut.after(heureFin))
+		{
+			new AlertDialog.Builder(this).setTitle("Heures incorrectes")
+			.setMessage("Veuillez entrer une heure de début supérieure à l'heure de fin")
+			.setPositiveButton("OK", null)
+			.show();
+			return;
+		}
 	}
 
 

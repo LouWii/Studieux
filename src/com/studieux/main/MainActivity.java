@@ -90,9 +90,10 @@ public class MainActivity extends MenuActivity {
 
 			LinearLayout layout = (LinearLayout) findViewById(R.id.layoutGraph);
 			layout.addView(chartView);
+			calculMoyenne();
 		}
 
-		calculMoyenne();
+		
 	}
 
 

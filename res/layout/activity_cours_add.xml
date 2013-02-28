@@ -1,78 +1,172 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     tools:context=".CoursAddActivity" >
 
-    <EditText
-        android:id="@+id/coursadd_courstype"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:ems="10" 
-        android:hint="@string/CoursAddtypecourshint">
-        <requestFocus />
-    </EditText>
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+	
+        <TextView
+            android:id="@+id/coursadd_courstypeTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="12dp"
+            android:textSize="24sp"
+        	android:textStyle="bold"
+            android:text="Type du cours"
+            />
+        
+        <EditText
+	        android:id="@+id/coursadd_courstype"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerHorizontal="true"
+	        android:layout_below="@+id/coursadd_courstypeTV"
+	        android:ems="10"
+	        android:hint="@string/CoursAddtypecourshint" />
+        
+        <TextView
+            android:id="@+id/coursadd_courssalleTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/coursadd_courstype"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="12dp"
+            android:textSize="24sp"
+        	android:textStyle="bold"
+            android:text="Lieu du cours"
+            />
+        
+        <EditText
+	        android:id="@+id/coursadd_courssalle"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerHorizontal="true"
+	        android:layout_below="@+id/coursadd_courssalleTV"
+	        android:ems="10" 
+	        android:hint="@string/CoursAddsallecourshint"/>
+        
+        <Button
+	        android:id="@+id/coursadd_selectionjour"
+	        style="?android:attr/buttonStyleSmall"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignRight="@+id/coursadd_coursheuredebut"
+	        android:layout_below="@+id/coursadd_courssalle"
+	        android:layout_marginTop="12dp"
+	        android:onClick="selectionnerJour" />
+	    
+        <TextView
+            android:id="@+id/coursadd_coursHdebutTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/coursadd_jour"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="12dp"
+            android:textSize="24sp"
+        	android:textStyle="bold"
+            android:text="Début"
+            />
+        
+	    <EditText
+	        android:id="@+id/coursadd_coursheuredebut"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerHorizontal="true"
+	        android:layout_below="@+id/coursadd_coursHdebutTV"
+	        android:ems="10"
+	        android:inputType="time" />
+	
+	    <TextView
+            android:id="@+id/coursadd_coursHfinTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/coursadd_coursheuredebut"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="12dp"
+            android:textSize="24sp"
+        	android:textStyle="bold"
+            android:text="Fin"
+            />
+	    
+	    <EditText
+	        android:id="@+id/coursadd_coursheurefin"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerHorizontal="true"
+	        android:layout_below="@+id/coursadd_coursHfinTV"
+	        android:layout_marginTop="5dp"
+	        android:ems="10"
+	        android:inputType="time" />
+	
+	    <TextView
+            android:id="@+id/coursadd_coursdatedebutTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/coursadd_coursheurefin"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="12dp"
+            android:textSize="24sp"
+        	android:textStyle="bold"
+            android:text="Date de début"
+            />
+	    
+	    <EditText
+	        android:id="@+id/coursadd_coursdatedebut"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerHorizontal="true"
+	        android:layout_below="@+id/coursadd_coursdatedebutTV"
+	        android:layout_marginTop="5dp"
+	        android:ems="10"
+	        android:inputType="date" />
+	
+	    <TextView
+            android:id="@+id/coursadd_coursdatefinTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/coursadd_coursdatedebut"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="12dp"
+            android:textSize="24sp"
+        	android:textStyle="bold"
+            android:text="Date de fin"
+            />
+	    
+	    <EditText
+	        android:id="@+id/coursadd_coursdatefin"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerHorizontal="true"
+	        android:layout_below="@+id/coursadd_coursdatefinTV"
+	        android:layout_marginTop="5dp"
+	        android:ems="10"
+	        android:inputType="date" />
+		
+	    <Button
+	        android:id="@+id/button1"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/coursadd_coursdatefin"
+	        android:layout_centerHorizontal="true"
+	        android:layout_marginBottom="78dp"
+	        android:onClick="enregistrer"
+	        android:text="@string/buttonEnregistrer"
+	        android:width="150dp" />
 
-    <Button
-        android:id="@+id/coursadd_selectionjour"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/coursadd_coursheuredebut"
-        android:layout_below="@+id/coursadd_courstype"
-        android:layout_marginTop="24dp"
-        android:onClick="selectionnerJour"
-        android:text=""
-       	/>
-
-    <EditText
-        android:id="@+id/coursadd_coursheuredebut"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/coursadd_courstype"
-        android:layout_below="@+id/coursadd_selectionjour"
-        android:ems="10"
-        android:inputType="time" />
-
-    <EditText
-        android:id="@+id/coursadd_coursheurefin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/coursadd_coursheuredebut"
-        android:layout_below="@+id/coursadd_coursheuredebut"
-        android:layout_marginTop="26dp"
-        android:ems="10"
-        android:inputType="time" />
-
-    <EditText
-        android:id="@+id/coursadd_coursdatedebut"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/coursadd_coursheurefin"
-        android:layout_below="@+id/coursadd_coursheurefin"
-        android:layout_marginTop="44dp"
-        android:ems="10"
-        android:inputType="date" />
-
-    <EditText
-        android:id="@+id/coursadd_coursdatefin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/coursadd_coursdatedebut"
-        android:layout_below="@+id/coursadd_coursdatedebut"
-        android:layout_marginTop="14dp"
-        android:ems="10"
-        android:inputType="date" />
-
-    <TextView
-        android:id="@+id/coursadd_jour"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/coursadd_selectionjour"
-        android:layout_alignBottom="@+id/coursadd_selectionjour"
-        android:layout_alignLeft="@+id/coursadd_coursheuredebut"
-        android:layout_marginLeft="17dp"
-        android:text="Sélectionner le jour ->" />
-
-</RelativeLayout>
+	    <TextView
+	        android:id="@+id/coursadd_jour"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignBaseline="@+id/coursadd_selectionjour"
+	        android:layout_alignBottom="@+id/coursadd_selectionjour"
+	        android:layout_alignLeft="@+id/coursadd_courssalle"
+	        android:textSize="18sp"
+	        android:text="Sélectionner le jour ->" />
+	    
+    </RelativeLayout>
+</ScrollView>
