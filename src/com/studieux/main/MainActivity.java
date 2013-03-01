@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
@@ -20,6 +23,8 @@ import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.renderer.XYSeriesRenderer;
 
 import com.studieux.bdd.Cours;
+import com.studieux.bdd.CoursDao;
+import com.studieux.bdd.CoursDao.Properties;
 import com.studieux.bdd.DaoMaster;
 import com.studieux.bdd.DaoSession;
 import com.studieux.bdd.DevoirDao;
@@ -45,6 +50,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.AnalogClock;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -61,10 +67,16 @@ public class MainActivity extends MenuActivity {
 	private DevoirDao devoirDao;
 	private NoteDao noteDao;
 	private PeriodeDao periodeDao;
+	private CoursDao coursDao;
 	private Cursor cursor;
 
 	private Matiere matiere;
 	private Periode periode;
+
+	//ListView des matieres
+	private ListView matiereListView;
+	private int currentRow;
+
 
 	//graph stuff
 	private XYMultipleSeriesDataset dataset;
@@ -90,6 +102,7 @@ public class MainActivity extends MenuActivity {
 		matiereDao = daoSession.getMatiereDao();
 		noteDao = daoSession.getNoteDao();
 		periodeDao = daoSession.getPeriodeDao();
+		coursDao = daoSession.getCoursDao();
 
 		if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
 		{
@@ -105,11 +118,14 @@ public class MainActivity extends MenuActivity {
 			LinearLayout layout = (LinearLayout) findViewById(R.id.layoutGraph);
 			layout.addView(chartView);
 			calculMoyenne();
-			getCurrentPeriode();
+			updateMatiereList();
+
 		}
 
 
 	}
+
+
 
 
 
@@ -222,29 +238,6 @@ public class MainActivity extends MenuActivity {
 		}
 	}
 
-
-	public void getCurrentPeriode()
-	{
-		Date d = new Date();
-		QueryBuilder<Periode> qb = periodeDao.queryBuilder();
-		//on récupère les périodes courante (date courant > date_debut et date courante < date_fin)
-		//normalement une seule période doit arriver (on n'autorise pas le chevauchement de périodes)
-		qb.where(com.studieux.bdd.PeriodeDao.Properties.Date_debut.le(d), com.studieux.bdd.PeriodeDao.Properties.Date_fin.ge(d));
-		List<Periode> periodes = qb.list();
-
-		if (periodes.size() >= 1)
-		{
-			periode = periodes.get(0);
-			//Toast.makeText(MatiereActivity.this, "lol:" + periode.getNom(), Toast.LENGTH_SHORT).show();
-		}
-
-
-		if (periode != null)
-		{
-			this.updateMatiereList();
-		}
-	}
-
 	public void updateMatiereList()
 	{
 
@@ -252,24 +245,33 @@ public class MainActivity extends MenuActivity {
 		int[] to = { R.id.coursHeureDebut , R.id.coursHeureFin, R.id.coursNomMatiere, R.id.coursType, R.id.coursSalle };
 
 		List<Map<String, String>> data = new ArrayList<Map<String, String>>();
-		
-		for(Matiere m : periode.getMatiereList())
+
+		Date d = new Date();
+		Calendar calendar = Calendar.getInstance();
+		int day = calendar.get(Calendar.DAY_OF_WEEK);
+
+		QueryBuilder<Cours> qb = coursDao.queryBuilder();
+		//on récupère les périodes courante (date courant > date_debut et date courante < date_fin)
+		//normalement une seule période doit arriver (on n'autorise pas le chevauchement de périodes)
+		qb.where(CoursDao.Properties.Date_debut.le(d), CoursDao.Properties.Date_fin.ge(d), CoursDao.Properties.Jour.eq(calendar.get(Calendar.DAY_OF_WEEK)));
+		qb.orderAsc(CoursDao.Properties.Heure_debut);
+		List<Cours> listeCours = qb.list();
+
+		for(Cours c : listeCours)
 		{
-			
-			for(Cours c : m.getCoursList())
-			{
-				//Contient le détail d'une période
-				Map<String, String> datum = new HashMap<String, String>(3);
-				datum.put("id", "" + c.getId());
-				SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
-				datum.put("heure_debut",formatter.format(c.getHeure_debut()));
-				datum.put("heure_fin",formatter.format(c.getHeure_fin()));
-				datum.put("matiereNom", m.getNom());
-				datum.put("type", c.getType());
-				datum.put("salle", "Lieu : " + c.getSalle());
-				data.add(datum);
-			}
+			//Contient le détail d'une période
+			Map<String, String> datum = new HashMap<String, String>(3);
+			datum.put("id", "" + c.getId());
+			SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
+			datum.put("heure_debut",formatter.format(c.getHeure_debut()));
+			datum.put("heure_fin",formatter.format(c.getHeure_fin()));
+			Matiere m = matiereDao.load(c.getMatiereId());
+			datum.put("matiereNom", m.getNom());
+			datum.put("type", c.getType());
+			datum.put("salle", "Lieu : " + c.getSalle());
+			data.add(datum);
 		}
+
 
 		//Adapter pour notre listView
 		SimpleAdapter adapter = new SimpleAdapter(this, 
@@ -279,79 +281,83 @@ public class MainActivity extends MenuActivity {
 				to);
 
 		//on récupère la liste on lui affecte l'adapter
-		ListView listview = (ListView) findViewById(R.id.coursListView);
+		matiereListView = (ListView) findViewById(R.id.coursListView);
 
-		listview.setAdapter(adapter);
+		matiereListView.setAdapter(adapter);
 
-//		listview.setOnItemLongClickListener( new OnItemLongClickListener () {
-//
-//			@Override
-//			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-//				// On récupère l'item clické = HashMap<String, String>
-//				HashMap<String, String> data = (HashMap<String, String>) arg0.getItemAtPosition(arg2);
-//
-//				Intent intention = new Intent(PeriodeActivity.this, PeriodeAddActivity.class);
-//				intention.putExtra( "id", Long.parseLong(data.get("id")) );
-//				startActivity(intention);
-//
-//				//Toast.makeText(PeriodeActivity.this, "id: " + data.get("id"), Toast.LENGTH_SHORT).show();
-//
-//				return false;
-//			}
-//
-//		});
+
+		matiereListView.post(new Runnable() {
+			public void run() {
+				MainActivity.this.updateView(0);
+			}
+		});
+	}
+
+	private void updateView(int index){
+
+		System.out.println(index - matiereListView.getFirstVisiblePosition());
+		if(index >= matiereListView.getFirstVisiblePosition() && index <= matiereListView.getLastVisiblePosition())
+		{
+			System.out.println("on peut modifier");
+			View v = matiereListView.getChildAt(index - matiereListView.getFirstVisiblePosition());
+			LinearLayout background = (LinearLayout) v.findViewById(R.id.backGroundLayout);
+			background.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
+		}
+		else
+		{
+			System.out.println(index + " | " + matiereListView.getFirstVisiblePosition() + " | " + matiereListView.getLastVisiblePosition());
+			System.out.println("on peut pas modifier");
+		}
+	}
+
+	@Override
+	protected void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
 	}
 
 
+	public void ajouterPeriode(View v)
+	{
+		Intent intention = new Intent(MainActivity.this, MatiereActivity.class);
+		startActivity(intention);
 
-@Override
-protected void onStart() {
-	// TODO Auto-generated method stub
-	super.onStart();
-}
+		//DialogFragment newFragment = new PeriodeSellectionDialogFragment();
+		//newFragment.show(getFragmentManager(), "ih");
+		//String tag = "dez";
+		//newFragment.show(getFragmentManager(), tag);
+	}
 
+	public void goToNotes(View v)
+	{
+		Intent intention = new Intent(MainActivity.this, NotesActivity.class);
+		startActivity(intention);
+		this.overridePendingTransition(R.anim.animation_enter,
+				R.anim.animation_leave);
 
-public void ajouterPeriode(View v)
-{
-	Intent intention = new Intent(MainActivity.this, MatiereActivity.class);
-	startActivity(intention);
+	}
 
-	//DialogFragment newFragment = new PeriodeSellectionDialogFragment();
-	//newFragment.show(getFragmentManager(), "ih");
-	//String tag = "dez";
-	//newFragment.show(getFragmentManager(), tag);
-}
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.activity_main, menu);
+		return true;
+	}
 
-public void goToNotes(View v)
-{
-	Intent intention = new Intent(MainActivity.this, NotesActivity.class);
-	startActivity(intention);
-	this.overridePendingTransition(R.anim.animation_enter,
-			R.anim.animation_leave);
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		setContentView(R.layout.activity_main);
+	}
 
-}
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		// TODO Auto-generated method stub
+		super.onSaveInstanceState(outState);
+	}
 
-@Override
-public boolean onCreateOptionsMenu(Menu menu) {
-	// Inflate the menu; this adds items to the action bar if it is present.
-	getMenuInflater().inflate(R.menu.activity_main, menu);
-	return true;
-}
-
-public void onConfigurationChanged(Configuration newConfig) {
-	super.onConfigurationChanged(newConfig);
-	setContentView(R.layout.activity_main);
-}
-
-@Override
-protected void onSaveInstanceState(Bundle outState) {
-	// TODO Auto-generated method stub
-	super.onSaveInstanceState(outState);
-}
-
-@Override   
-protected void onRestoreInstanceState(Bundle savedInstanceState) {
-	super.onRestoreInstanceState(savedInstanceState);
-}
+	@Override   
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+	}
 
 }
