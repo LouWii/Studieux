@@ -6,6 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.studieux.bdd.Cours;
@@ -17,6 +19,8 @@ import com.studieux.bdd.MatiereDao;
 import com.studieux.bdd.Periode;
 import com.studieux.bdd.PeriodeDao;
 import com.studieux.bdd.DaoMaster.DevOpenHelper;
+
+import de.greenrobot.dao.QueryBuilder;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -44,8 +48,13 @@ public class CoursAddActivity extends MenuActivity {
 	static final int HEUREDEBUT_DIALOG_ID = 3;
 	static final int HEUREFIN_DIALOG_ID = 4;
 	
-	String [] noms;
+	private String [] noms;
+	private HashMap<String, Integer> correctionJour;
 	private int jourSelectionne = -1;
+	
+	
+	SimpleDateFormat dateFormatter;
+	SimpleDateFormat heureFormatter;
 	
 	EditText dateDebutET;
 	EditText dateFinET;
@@ -61,7 +70,7 @@ public class CoursAddActivity extends MenuActivity {
     private DaoSession daoSession;
     private PeriodeDao periodeDao;
     private MatiereDao matiereDao;
-    private CoursDao coursDAO;
+    private CoursDao coursDao;
     private Matiere matiere;
     private Periode periode;
 	
@@ -94,7 +103,7 @@ public class CoursAddActivity extends MenuActivity {
 		    daoMaster = new DaoMaster(db);
 		    daoSession = daoMaster.newSession();
 		    matiereDao = daoSession.getMatiereDao();
-		    coursDAO = daoSession.getCoursDao();
+		    coursDao = daoSession.getCoursDao();
 		}
 		
 		Bundle donnees = getIntent().getExtras();
@@ -103,11 +112,11 @@ public class CoursAddActivity extends MenuActivity {
 		{
 			matiere = matiereDao.load(donnees.getLong("MatiereId"));
 			periode = matiere.getPeriode();
-			DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+			dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
 			dateDebutET = (EditText)findViewById(R.id.coursadd_coursdatedebut);
 			dateFinET = (EditText)findViewById(R.id.coursadd_coursdatefin);
-			dateDebutET.setText(formatter.format(periode.getDate_debut()));
-			dateFinET.setText(formatter.format(periode.getDate_fin()));
+			dateDebutET.setText(dateFormatter.format(periode.getDate_debut()));
+			dateFinET.setText(dateFormatter.format(periode.getDate_fin()));
 			dateDebutET.setOnTouchListener(new OnTouchListener(){ 
 				@Override
 				public boolean onTouch(View v, MotionEvent event) {
@@ -150,13 +159,13 @@ public class CoursAddActivity extends MenuActivity {
 					return false;  
 				}
 			});
-			formatter = new SimpleDateFormat("HH:mm");
+			heureFormatter = new SimpleDateFormat("HH:mm");
 			heureDebut = Calendar.getInstance();
 			heureDebut.set(1, 1, 1, 9, 0);
-			heureDebutET.setText(formatter.format(heureDebut.getTime()));
+			heureDebutET.setText(heureFormatter.format(heureDebut.getTime()));
 			heureFin = Calendar.getInstance();
 			heureFin.set(1, 1, 1, 10, 0);
-			heureFinET.setText(formatter.format(heureFin.getTime()));
+			heureFinET.setText(heureFormatter.format(heureFin.getTime()));
 			//TextView nomMatiere = (TextView) findViewById(R.id.cours_matierenom);
 			//nomMatiere.setText(matiere.getNom());
 		}
@@ -218,8 +227,7 @@ public class CoursAddActivity extends MenuActivity {
 		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 			heureDebut = Calendar.getInstance();
 			heureDebut.set(1, 1, 1, hourOfDay, minute);
-			DateFormat formatter = new SimpleDateFormat("HH:mm");
-			heureDebutET.setText(formatter.format(heureDebut.getTime()));
+			heureDebutET.setText(heureFormatter.format(heureDebut.getTime()));
 		}
 	};
 	
@@ -232,8 +240,7 @@ public class CoursAddActivity extends MenuActivity {
 		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 			heureFin = Calendar.getInstance();
 			heureFin.set(1, 1, 1, hourOfDay, minute);
-			DateFormat formatter = new SimpleDateFormat("HH:mm");
-			heureFinET.setText(formatter.format(heureFin.getTime()));
+			heureFinET.setText(heureFormatter.format(heureFin.getTime()));
 		}
 	};
 	
@@ -254,6 +261,15 @@ public class CoursAddActivity extends MenuActivity {
 			noms[4] = "Vendredi";
 			noms[5] = "Samedi";
 			noms[6] = "Dimanche";
+			
+			correctionJour = new HashMap<String, Integer>();
+			correctionJour.put("Dimanche", 1);
+			correctionJour.put("Lundi", 2);
+			correctionJour.put("Mardi", 3);
+			correctionJour.put("Mercredi", 4);
+			correctionJour.put("Jeudi", 5);
+			correctionJour.put("Vendredi", 6);
+			correctionJour.put("Samedi", 7);
 		}
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -264,9 +280,10 @@ public class CoursAddActivity extends MenuActivity {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				//NoteAddActivity.this.loadMatiere(Long.parseLong(NoteAddActivity.this.data.get(which).get("id")));
-				jourSelectionne = which;
+				String jr = noms[which];
+				jourSelectionne = correctionJour.get(jr);
 				TextView jour = (TextView)findViewById(R.id.coursadd_jour);
-				jour.setText(noms[which]);
+				jour.setText(jr);
 			}
 		});
 		builder.create();         
@@ -312,14 +329,13 @@ public class CoursAddActivity extends MenuActivity {
 		}
 		
 		//Création des dates avec le format donné
-		DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");		
 		Date dateFinDate = null;
 		Date dateDebutDate = null;
 
 		try {
-			dateDebutDate = formatter.parse(this.dateDebutET.getText().toString());
+			dateDebutDate = dateFormatter.parse(this.dateDebutET.getText().toString());
 
-			dateFinDate = formatter.parse(this.dateFinET.getText().toString());
+			dateFinDate = dateFormatter.parse(this.dateFinET.getText().toString());
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -332,7 +348,7 @@ public class CoursAddActivity extends MenuActivity {
 			if (dateDebutDate.after(dateFinDate) )
 			{
 				new AlertDialog.Builder(this).setTitle("Dates incorrectes")
-				.setMessage("Veuillez entrer un date de début supérieure à la date de fin")
+				.setMessage("Veuillez entrer une date de début supérieure à la date de fin")
 				.setPositiveButton("OK", null)
 				.show();
 				return;
@@ -340,7 +356,24 @@ public class CoursAddActivity extends MenuActivity {
 		}
 		else
 		{
-
+			return;
+		}
+		
+		//Vérification si les dates du cours
+		if (dateDebutDate.before(this.periode.getDate_debut()))
+		{
+			new AlertDialog.Builder(this).setTitle("Date de début incorrecte")
+			.setMessage("Veuillez entrer une date de début de cours comprise entre le " + dateFormatter.format(this.periode.getDate_debut()) + " et le " + dateFormatter.format(this.periode.getDate_debut()) + "(dates de la période dans laquelle se trouvera le cours)." )
+			.setPositiveButton("OK", null)
+			.show();
+			return;
+		}
+		if (dateFinDate.after(this.periode.getDate_fin()))
+		{
+			new AlertDialog.Builder(this).setTitle("Date de fin incorrecte")
+			.setMessage("Veuillez entrer une date de fin de cours comprise entre le " + dateFormatter.format(this.periode.getDate_debut()) + " et le " + dateFormatter.format(this.periode.getDate_debut()) + "(dates de la période dans laquelle se trouvera le cours)." )
+			.setPositiveButton("OK", null)
+			.show();
 			return;
 		}
 		
@@ -354,6 +387,54 @@ public class CoursAddActivity extends MenuActivity {
 			return;
 		}
 		
+		//vérification si le cours n'en chevauche pas un autre
+		//obligation de passer par une requête
+		QueryBuilder<Cours> qb = coursDao.queryBuilder();
+		qb.where(
+				com.studieux.bdd.CoursDao.Properties.Jour.eq(jourSelectionne), 
+				com.studieux.bdd.CoursDao.Properties.Heure_debut.between(heureDebut.getTime().getTime(), heureFin.getTime().getTime())
+		);
+		qb.or(
+				com.studieux.bdd.CoursDao.Properties.Jour.eq(jourSelectionne), 
+				com.studieux.bdd.CoursDao.Properties.Heure_fin.between(heureDebut.getTime().getTime(), heureFin.getTime().getTime())
+		);
+		List<Cours> lesCours = qb.list(); //cours chevauchant le nouveau cours
+		
+		Toast.makeText(CoursAddActivity.this, "list chevauch " + lesCours.size(), Toast.LENGTH_SHORT).show();
+		
+		//on va vérifier si les cours ne se chevauchent  pas car dates décalées
+		for (Cours cours2 : lesCours) {
+			if ( 
+					( dateDebutDate.after(cours2.getDate_debut()) && dateDebutDate.before(cours2.getDate_fin()) )
+					|| ( dateFinDate.after(cours2.getDate_debut()) && dateFinDate.before(cours2.getDate_fin()) )
+			)
+			{
+				Date dtdebut = new Date(cours2.getHeure_debut());
+				Date dtfin = new Date(cours2.getHeure_fin());
+				
+				new AlertDialog.Builder(this).setTitle("Cours chevauchant un autre")
+				.setMessage("Le cous que vous désirez enregistrer en chevauche un autre : " 
+						+ cours2.getMatiere().getNom() 
+						+ ", " 
+						+ cours2.getType() 
+						+ ", ayant lieu le "
+						+ (String) noms[cours2.getJour()]
+						+ ", de "
+						+ heureFormatter.format(dtdebut)
+						+ " à "
+						+ heureFormatter.format(dtfin)
+						+ ", du "
+						+ dateFormatter.format(cours2.getDate_debut())
+						+ " au "
+						+ dateFormatter.format(cours2.getDate_fin())
+						
+				)
+				.setPositiveButton("OK", null)
+				.show();
+				return;
+			}
+		}
+		
 		Cours c = new Cours();
 		c.setMatiere(matiere);
 		c.setType(type.getText().toString());
@@ -365,7 +446,7 @@ public class CoursAddActivity extends MenuActivity {
 		c.setHeure_debut(heureDebut.getTime().getTime()); //les heures sont stockées en LONG.
 		c.setHeure_fin(heureFin.getTime().getTime());
 		
-		if (coursDAO.insert(c) != 0 )
+		if (coursDao.insert(c) != 0 )
 		{
 			Toast.makeText(CoursAddActivity.this, "Cours enregistrée", Toast.LENGTH_SHORT).show();	
 		}

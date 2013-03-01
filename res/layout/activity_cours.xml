@@ -15,4 +15,13 @@
         android:text="Large Text"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
+    <ListView
+        android:id="@+id/cours_listviewcours"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cours_matierenom"
+        android:layout_centerHorizontal="true" 
+        android:layout_marginTop="14dp">
+    </ListView>
+
 </RelativeLayout>
