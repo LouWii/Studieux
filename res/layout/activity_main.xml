@@ -16,14 +16,14 @@
             android:layout_height="match_parent"
             android:layout_weight="0.5"
             android:gravity="left"
-            android:orientation="vertical" >
+            android:orientation="vertical" 
+            android:background="@color/gray_menu">
 
             <ListView
-                android:id="@+id/listView1"
+                android:id="@+id/coursListView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/gray_menu"
-                android:divider="@color/white" >
+                android:background="@android:color/darker_gray">
             </ListView>
         </LinearLayout>
 

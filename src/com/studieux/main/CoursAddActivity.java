@@ -356,7 +356,7 @@ public class CoursAddActivity extends MenuActivity {
 		
 		Cours c = new Cours();
 		c.setMatiere(matiere);
-		c.setType(lieu.getText().toString());
+		c.setType(type.getText().toString());
 		c.setSalle(lieu.getText().toString());
 		c.setJour(jourSelectionne);
 		c.setDate_debut(dateDebutDate);
