@@ -27,7 +27,9 @@
 	        android:layout_centerHorizontal="true"
 	        android:layout_below="@+id/coursadd_courstypeTV"
 	        android:ems="10"
-	        android:hint="@string/CoursAddtypecourshint" />
+	        android:hint="@string/CoursAddtypecourshint"
+	        android:inputType="textAutoCorrect"
+        	android:maxLines="1" />
         
         <TextView
             android:id="@+id/coursadd_courssalleTV"
@@ -48,7 +50,9 @@
 	        android:layout_centerHorizontal="true"
 	        android:layout_below="@+id/coursadd_courssalleTV"
 	        android:ems="10" 
-	        android:hint="@string/CoursAddsallecourshint"/>
+	        android:hint="@string/CoursAddsallecourshint" 
+	        android:inputType="textAutoCorrect"
+        	android:maxLines="1"/>
         
         <Button
 	        android:id="@+id/coursadd_selectionjour"

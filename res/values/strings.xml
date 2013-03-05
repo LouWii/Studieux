@@ -27,10 +27,11 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_note_add">NoteAddActivity</string>
     <string name="title_activity_cours_add">CoursAddActivity</string>
-    
-    <!--  Ecran ajout d'un cours -->
-	<string name="CoursAddtypecourshint">Amphi, TD, TP...</string>
-	<string name="CoursAddsallecourshint">Lieu, salle...</string>
+
+    <!-- Ecran ajout d'un cours -->
+    <string name="CoursAddtypecourshint">Amphi, TD, TP...</string>
+    <string name="CoursAddsallecourshint">Lieu, salle...</string>
     <string name="title_activity_liste_notes">ListeNotesActivity</string>
+    <string name="title_activity_devoirs">DevoirsActivity</string>
 
 </resources>

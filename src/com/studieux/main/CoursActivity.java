@@ -78,12 +78,17 @@ public class CoursActivity extends MenuActivity {
 			TextView nomMatiere = (TextView) findViewById(R.id.cours_matierenom);
 			nomMatiere.setText("Cours de : "  + matiere.getNom());
 			
-			updateList();
+			//updateList();
 		}
 		else if (matiere == null)//sinon, on cherche la période courante si pas de période
 		{
 			Toast.makeText(CoursActivity.this, "Pas de matière sélectionnée...", Toast.LENGTH_SHORT).show();
 			finish();
+		}
+		
+		if (matiere != null)
+		{
+			updateList();
 		}
 	}
 
@@ -123,10 +128,13 @@ public class CoursActivity extends MenuActivity {
 	{	
 		if (matiere!=null)
 		{
+			matiere.resetCoursList();
 			List<Cours> cList = matiere.getCoursList();
 			List<Map<String, String>> data = new ArrayList<Map<String, String>>();
 			String[] from = {"heure_debut", "heure_fin", "date_debut", "date_fin", "type", "salle"};
 			int[] to = { R.id.coursHeureDebut , R.id.coursHeureFin, R.id.coursDateDebut, R.id.coursDateFin, R.id.coursType, R.id.coursSalle };
+			
+			Toast.makeText(CoursActivity.this, "list:" + cList.size(), Toast.LENGTH_SHORT).show();
 			
 			for (Cours c : cList) {
 				Map<String, String> datum = new HashMap<String, String>(3);

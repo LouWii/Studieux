@@ -82,7 +82,9 @@
         android:layout_marginTop="14dp"
         android:ems="10"
         android:hint="@string/PeriodeNameHint"
-        android:textColorLink="@color/redButtons" />
+        android:textColorLink="@color/redButtons" 
+        android:inputType="textAutoCorrect"
+        android:maxLines="1"/>
 
     <Button
         android:id="@+id/button1"
