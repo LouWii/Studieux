@@ -7,6 +7,16 @@
     <string name="title_activity_cours">CoursActivity</string>
     <string name="title_activity_periode_add">PeriodeAddActivity</string>
 
+    <!-- Ecran des devoirs -->
+    <string name="DevoirsTitle">Devoirs :</string>
+
+    <!-- Ecran ajout d'un devoir -->
+    <string name="DevoirAddNomLabel">Nom</string>
+    <string name="DevoirAddNomHint">Exo Maths, DM Histoire...</string>
+    <string name="DevoirAddDescLabel">Description</string>
+    <string name="DevoirAddDescHint">Ex 1 p 337...</string>
+    <string name="DevoirAddDeadlineLabel">Date de rendu</string>
+    
     <!-- Ecran ajout d'une période -->
     <string name="PeriodeText">Nom de la période :</string>
     <string name="PeriodeTextExample">Par exemple \&quot;Semestre 1\&quot;</string>
@@ -33,5 +43,6 @@
     <string name="CoursAddsallecourshint">Lieu, salle...</string>
     <string name="title_activity_liste_notes">ListeNotesActivity</string>
     <string name="title_activity_devoirs">DevoirsActivity</string>
+    <string name="title_activity_devoirs_add">DevoirsAddActivity</string>
 
 </resources>

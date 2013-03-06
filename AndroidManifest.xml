@@ -74,6 +74,10 @@
             android:name="com.studieux.main.DevoirsActivity"
             android:label="@string/title_activity_devoirs" >
         </activity>
+        <activity
+            android:name="com.studieux.main.DevoirsAddActivity"
+            android:label="@string/title_activity_devoirs_add" >
+        </activity>
     </application>
 
 </manifest>

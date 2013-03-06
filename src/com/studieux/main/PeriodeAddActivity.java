@@ -57,10 +57,10 @@ public class PeriodeAddActivity extends Activity {
 		int cmonth = c.get(Calendar.MONTH);
 		int cday = c.get(Calendar.DAY_OF_MONTH);
 		switch (id) {
-		case DATEDEBUT_DIALOG_ID:
-			return new DatePickerDialog(this,  mDateDebutSetListener,  cyear, cmonth, cday);
-		case DATEFIN_DIALOG_ID:
-			return new DatePickerDialog(this,  mDateFinSetListener,  cyear, cmonth, cday);
+			case DATEDEBUT_DIALOG_ID:
+				return new DatePickerDialog(this,  mDateDebutSetListener,  cyear, cmonth, cday);
+			case DATEFIN_DIALOG_ID:
+				return new DatePickerDialog(this,  mDateFinSetListener,  cyear, cmonth, cday);
 		}
 		return null;
 
@@ -210,7 +210,7 @@ public class PeriodeAddActivity extends Activity {
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			Log.e("Erreur perso", "Erreur du cast de String en Date. " + e.getMessage());
+			Log.e("Erreur CAST", "Erreur du cast de String en Date. " + e.getMessage());
 		}
 
 		//controle des dates
@@ -227,7 +227,10 @@ public class PeriodeAddActivity extends Activity {
 		}
 		else
 		{
-
+			new AlertDialog.Builder(this).setTitle("Date incorrecte")
+			.setMessage("Il semble y avoir un problème avec les dates...")
+			.setPositiveButton("OK", null)
+			.show();
 			return;
 		}
 

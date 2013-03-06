@@ -1,0 +1,119 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DevoirsAddActivity" >
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button1"
+        android:layout_below="@+id/button1"
+        android:layout_marginTop="15dp"
+        android:text="" 
+        android:onClick="selectionnerMatiere"/>
+
+    <TextView
+        android:id="@+id/devoirsAddMatiereLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/button2"
+        android:layout_alignBottom="@+id/button2"
+        android:layout_alignRight="@+id/devoirAddPeriodeLabel"
+        android:text=""
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/devoirAddNomTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/button2"
+        android:layout_marginTop="22dp"
+        android:layout_marginLeft="40dp"
+        android:text="@string/DevoirAddNomLabel" />
+
+    <EditText
+        android:id="@+id/devoirAddNomET"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/devoirAddNomTV"
+        android:layout_below="@+id/devoirAddNomTV"
+        android:layout_marginTop="8dp"
+        android:ems="10" 
+        android:inputType="textAutoCorrect"
+        android:maxLines="1"
+        >
+
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:id="@+id/devoirAddDescTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/devoirAddNomET"
+        android:layout_below="@+id/devoirAddNomET"
+        android:layout_marginTop="22dp"
+        android:text="@string/DevoirAddDescLabel" />
+
+    <EditText
+        android:id="@+id/devoirAddDescET"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/devoirAddDescTV"
+        android:layout_below="@+id/devoirAddDescTV"
+        android:layout_marginTop="8dp"
+        android:ems="10" 
+        android:inputType="textMultiLine" 
+        android:maxLength="255" />
+
+    <TextView
+        android:id="@+id/devoirAddDeadlineTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/devoirAddDescET"
+        android:layout_below="@+id/devoirAddDescET"
+        android:layout_marginTop="22dp"
+        android:text="@string/DevoirAddDeadlineLabel" />
+    
+    <EditText
+        android:id="@+id/devoirAddDeadlineTE"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/devoirAddDeadlineTV"
+        android:layout_alignLeft="@+id/devoirAddDeadlineTV"
+        android:ems="10"
+        android:inputType="date" />
+    
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="18dp"
+        android:text="@string/buttonEnregistrer" 
+        android:onClick="enregistrer"/>
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="12dp"
+        android:layout_toRightOf="@+id/devoirAddPeriodeLabel" 
+        android:onClick="selectionnerPeriode"/>
+
+    <TextView
+        android:id="@+id/devoirAddPeriodeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/button1"
+        android:layout_alignBottom="@+id/button1"
+        android:layout_centerHorizontal="true"
+        android:text="Choisir un semestre"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+</RelativeLayout>

@@ -61,12 +61,14 @@ public class PeriodeActivity extends MenuActivity {
 	{
 		
 		//Db init
-		DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "studieux-db.db", null);
-        db = helper.getWritableDatabase();
-        daoMaster = new DaoMaster(db);
-        daoSession = daoMaster.newSession();
-        periodeDao = daoSession.getPeriodeDao();
-        
+		if (periodeDao==null)
+		{
+			DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "studieux-db.db", null);
+	        db = helper.getWritableDatabase();
+	        daoMaster = new DaoMaster(db);
+	        daoSession = daoMaster.newSession();
+	        periodeDao = daoSession.getPeriodeDao();
+		}
         //Recupération des periodes en BD
         String ddColumn = PeriodeDao.Properties.Date_debut.columnName;
         String orderBy = ddColumn + " COLLATE LOCALIZED ASC";

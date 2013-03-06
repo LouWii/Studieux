@@ -86,6 +86,9 @@ public class MenuActivity extends Activity {
 		case 2 :
 			intention = new Intent(MenuActivity.this, MatiereActivity.class);
 			break;
+		case 3 :
+			intention = new Intent(MenuActivity.this, DevoirsActivity.class);
+			break;
 		case 4 :
 			intention = new Intent(MenuActivity.this, NotesActivity.class);
 			break;

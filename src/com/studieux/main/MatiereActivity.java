@@ -63,7 +63,7 @@ public class MatiereActivity extends MenuActivity {
 	private DaoMaster daoMaster;
     private DaoSession daoSession;
     private PeriodeDao periodeDao;
-	private Long currentPeriodeId;
+	//private Long currentPeriodeId;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -185,7 +185,7 @@ public class MatiereActivity extends MenuActivity {
     				// TODO Auto-generated method stub
     				//Toast.makeText(MatiereActivity.this, "id: " + value, Toast.LENGTH_SHORT).show();
     				periodeHasChanged(value);
-    				MatiereActivity.this.currentPeriodeId = value;
+    				//MatiereActivity.this.currentPeriodeId = value;
     			}
     		});
 
