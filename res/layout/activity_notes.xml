@@ -23,9 +23,9 @@
             android:layout_gravity="center_horizontal"
             android:onClick="goToNoteList"/>
 
-        <View
-            android:id="@+id/view1"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/noteBarre"
+            android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="10dp"
             android:background="@android:color/holo_blue_light" />

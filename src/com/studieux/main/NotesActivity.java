@@ -109,6 +109,7 @@ public class NotesActivity extends MenuActivity {
 				renderer.addXTextLabel(cursor.getPosition()+1, cursor.getString((NoteDao.Properties.Description.ordinal)));
 			} while (cursor.moveToNext());         
 		}
+		renderer.setXAxisMax(cursor.getCount());
 	}
 
 	public void calculMoyenne()
