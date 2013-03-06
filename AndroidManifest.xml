@@ -64,11 +64,15 @@
         <activity
             android:name="com.studieux.main.CoursAddActivity"
             android:label="@string/title_activity_cours_add" >
-		</activity>
-		<activity
+        </activity>
+        <activity
             android:name="com.studieux.main.ListeNotesActivity"
             android:label="@string/title_activity_liste_notes"
             android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name="com.studieux.main.DevoirsActivity"
+            android:label="@string/title_activity_devoirs" >
         </activity>
     </application>
 
