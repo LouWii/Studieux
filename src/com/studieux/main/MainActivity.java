@@ -39,6 +39,7 @@ import com.studieux.bdd.DaoMaster.DevOpenHelper;
 import de.greenrobot.dao.QueryBuilder;
 
 import android.R.color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -46,6 +47,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.app.DialogFragment;
+import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -53,10 +55,12 @@ import android.widget.AdapterView;
 import android.widget.AnalogClock;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.Toast;
 public class MainActivity extends MenuActivity {
 
 	//DB stuff
@@ -73,10 +77,14 @@ public class MainActivity extends MenuActivity {
 	private Matiere matiere;
 	private Periode periode;
 
-	//ListView des matieres
-	private ListView matiereListView;
+	//ListView des cours
+	private ListView coursListView;
 	private int currentRow;
-
+	private ListUpdater coursUpdater;
+	private List<Map<String, String>> data;
+	SimpleAdapter adapter;
+	private int oldCoursCount = 0;
+	private List<Cours> listeCours;
 
 	//graph stuff
 	private XYMultipleSeriesDataset dataset;
@@ -94,6 +102,30 @@ public class MainActivity extends MenuActivity {
 		currentButtonIndex = 0;
 
 		//Database stuff
+		initDatabase();
+
+		if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+		{
+			initNotesGraph();
+			initDateTV();
+
+			initCoursList();
+
+		}		
+	}
+
+
+	public void initDateTV()
+	{
+		TextView dateTV = (TextView) findViewById(R.id.dateTV);
+		Date today = new Date();
+		Calendar c = Calendar.getInstance();
+		java.text.DateFormat fmt = DateFormat.getLongDateFormat(this);	   
+		dateTV.setText(fmt.format(c.getTime()));
+	}
+
+	public void initDatabase()
+	{
 		DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "studieux-db.db", null);
 		db = helper.getWritableDatabase();
 		daoMaster = new DaoMaster(db);
@@ -103,31 +135,25 @@ public class MainActivity extends MenuActivity {
 		noteDao = daoSession.getNoteDao();
 		periodeDao = daoSession.getPeriodeDao();
 		coursDao = daoSession.getCoursDao();
-
-		if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
-		{
-			GraphicalView chartView;
-			series = new XYSeries("notes");
-			dataset = new XYMultipleSeriesDataset();
-			renderer = getBarDemoRenderer();
-			fillGraphData();
-			dataset.addSeries(series);
-			chartView = ChartFactory.getBarChartView(this, dataset,renderer, Type.DEFAULT);
-			setChartSettings(renderer);
-
-			LinearLayout layout = (LinearLayout) findViewById(R.id.layoutGraph);
-			layout.addView(chartView);
-			calculMoyenne();
-			updateMatiereList();
-
-		}
-
-
 	}
 
 
+	//--------------------------Methodes pour la liste des notes---------------------------------------------------------------------------
 
-
+	public void initNotesGraph()
+	{
+		GraphicalView chartView;
+		series = new XYSeries("notes");
+		dataset = new XYMultipleSeriesDataset();
+		renderer = getBarDemoRenderer();
+		fillGraphData();
+		dataset.addSeries(series);
+		chartView = ChartFactory.getBarChartView(this, dataset,renderer, Type.DEFAULT);
+		setChartSettings(renderer);
+		LinearLayout layout = (LinearLayout) findViewById(R.id.layoutGraph);
+		layout.addView(chartView);
+		calculMoyenne();
+	}
 
 	public XYMultipleSeriesRenderer getBarDemoRenderer() 
 	{
@@ -162,7 +188,6 @@ public class MainActivity extends MenuActivity {
 		renderer.setXTitle("Devoirs");
 		renderer.setYTitle("Points (/20)");
 		renderer.setXAxisMin(0);
-		renderer.setXAxisMax(5);
 		renderer.setYAxisMin(0);
 		renderer.setYAxisMax(24);
 	}
@@ -187,6 +212,7 @@ public class MainActivity extends MenuActivity {
 				renderer.addXTextLabel(cursor.getPosition()+1, cursor.getString((NoteDao.Properties.Description.ordinal)));
 			} while (cursor.moveToNext());         
 		}
+		renderer.setXAxisMax(cursor.getCount()+1);
 	}
 
 
@@ -203,7 +229,6 @@ public class MainActivity extends MenuActivity {
 
 		if(cursor.getCount() != 0)
 		{
-
 			//On parse la liste pour convertir les long en Date, avant affichage
 			List<Map<String, String>> data = new ArrayList<Map<String, String>>();
 			cursor.moveToFirst();
@@ -238,95 +263,149 @@ public class MainActivity extends MenuActivity {
 		}
 	}
 
-	public void updateMatiereList()
-	{
 
+
+
+	//--------------------------Methodes pour la iste des cours-------------------------------------------------------------------------------
+
+
+	public void initCoursList()
+	{
 		String[] from = {"heure_debut", "heure_fin", "matiereNom", "type", "salle"};
 		int[] to = { R.id.coursHeureDebut , R.id.coursHeureFin, R.id.coursNomMatiere, R.id.coursType, R.id.coursSalle };
-
-		List<Map<String, String>> data = new ArrayList<Map<String, String>>();
-
-		Date d = new Date();
-		Calendar calendar = Calendar.getInstance();
-		int day = calendar.get(Calendar.DAY_OF_WEEK);
-
-		QueryBuilder<Cours> qb = coursDao.queryBuilder();
-		//on récupère les périodes courante (date courant > date_debut et date courante < date_fin)
-		//normalement une seule période doit arriver (on n'autorise pas le chevauchement de périodes)
-		qb.where(CoursDao.Properties.Date_debut.le(d), CoursDao.Properties.Date_fin.ge(d), CoursDao.Properties.Jour.eq(calendar.get(Calendar.DAY_OF_WEEK)));
-		qb.orderAsc(CoursDao.Properties.Heure_debut);
-		List<Cours> listeCours = qb.list();
-
-		for(Cours c : listeCours)
-		{
-			//Contient le détail d'une période
-			Map<String, String> datum = new HashMap<String, String>(3);
-			datum.put("id", "" + c.getId());
-			SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
-			datum.put("heure_debut",formatter.format(c.getHeure_debut()));
-			datum.put("heure_fin",formatter.format(c.getHeure_fin()));
-			Matiere m = matiereDao.load(c.getMatiereId());
-			datum.put("matiereNom", m.getNom());
-			datum.put("type", c.getType());
-			datum.put("salle", "Lieu : " + c.getSalle());
-			data.add(datum);
-		}
-
-
+		data = new ArrayList<Map<String, String>>();
 		//Adapter pour notre listView
-		SimpleAdapter adapter = new SimpleAdapter(this, 
+		adapter = new SimpleAdapter(this, 
 				data,
 				R.layout.cours_list_item,
 				from,
 				to);
-
 		//on récupère la liste on lui affecte l'adapter
-		matiereListView = (ListView) findViewById(R.id.coursListView);
+		coursListView = (ListView) findViewById(R.id.coursListView);
 
-		matiereListView.setAdapter(adapter);
+		coursListView.setAdapter(adapter);
+	}
 
-
-		matiereListView.post(new Runnable() {
+	public void updateCoursList()
+	{
+		runOnUiThread(new Runnable() {
 			public void run() {
-				MainActivity.this.updateView(0);
+				String[] from = {"heure_debut", "heure_fin", "matiereNom", "type", "salle"};
+				int[] to = { R.id.coursHeureDebut , R.id.coursHeureFin, R.id.coursNomMatiere, R.id.coursType, R.id.coursSalle };
+
+				if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+				{
+
+					
+					
+					Date d = new Date();
+					Calendar calendar = Calendar.getInstance();
+					int day = calendar.get(Calendar.DAY_OF_WEEK);
+					Calendar heureCalendar = Calendar.getInstance();
+					heureCalendar.set(1, 1, 1);
+
+					QueryBuilder<Cours> qb = coursDao.queryBuilder();
+					//on récupère les périodes courante (date courant > date_debut et date courante < date_fin)
+					//normalement une seule période doit arriver (on n'autorise pas le chevauchement de périodes)
+					qb.where(CoursDao.Properties.Date_debut.le(d), CoursDao.Properties.Date_fin.ge(d), CoursDao.Properties.Jour.eq(calendar.get(Calendar.DAY_OF_WEEK)), CoursDao.Properties.Heure_fin.gt(heureCalendar.getTime().getTime()));
+					qb.orderAsc(CoursDao.Properties.Heure_debut);
+					MainActivity.this.listeCours = qb.list();
+
+					if(listeCours.size() != 0)
+					{
+						if(listeCours.size() != oldCoursCount)
+						{
+							MainActivity.this.data.clear();
+							
+							oldCoursCount = listeCours.size();
+							for(Cours c : listeCours)
+							{
+								//Contient le détail d'une période
+								Map<String, String> datum = new HashMap<String, String>(3);
+								datum.put("id", "" + c.getId());
+								SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
+								datum.put("heure_debut",formatter.format(c.getHeure_debut()));
+								datum.put("heure_fin",formatter.format(c.getHeure_fin()));
+								Matiere m = matiereDao.load(c.getMatiereId());
+								datum.put("matiereNom", m.getNom());
+								datum.put("type", c.getType());
+								datum.put("salle", "Lieu : " + c.getSalle());
+								MainActivity.this.data.add(datum);
+							}
+
+
+							System.out.println("courslist.size : " + listeCours.size());
+							System.out.println("datalist.size : " + data.size());
+							MainActivity.this.adapter = new SimpleAdapter(MainActivity.this, 
+									MainActivity.this.data,
+									R.layout.cours_list_item,
+									from,
+									to);
+
+
+
+							//MainActivity.this.adapter.notifyDataSetChanged();
+							//MainActivity.this.coursListView.invalidate();
+							MainActivity.this.coursListView.setAdapter(adapter);
+
+						}
+						coursListView.post(new Runnable() {
+							public void run() {
+								MainActivity.this.repaintCurrentMatiere();
+							}
+						});
+					}
+
+				}
 			}
 		});
 	}
 
-	private void updateView(int index){
+	/**
+	 * Change la couleur de la cellule d'index 0 si c'est le cours actuel
+	 */
+	private void repaintCurrentMatiere(){
+		//Index de la cellule à modifier
+		int index = 0 ;
 
-		System.out.println(index - matiereListView.getFirstVisiblePosition());
-		if(index >= matiereListView.getFirstVisiblePosition() && index <= matiereListView.getLastVisiblePosition())
+		Calendar heureCalendar = Calendar.getInstance();
+		heureCalendar.set(1, 1, 1);
+		if(heureCalendar.getTime().getTime() >= listeCours.get(0).getHeure_debut())
 		{
-			System.out.println("on peut modifier");
-			View v = matiereListView.getChildAt(index - matiereListView.getFirstVisiblePosition());
-			LinearLayout background = (LinearLayout) v.findViewById(R.id.backGroundLayout);
-			background.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
+
+			if(index >= coursListView.getFirstVisiblePosition() && index <= coursListView.getLastVisiblePosition())
+			{
+				View v = coursListView.getChildAt(index - coursListView.getFirstVisiblePosition());
+				LinearLayout background = (LinearLayout) v.findViewById(R.id.backGroundLayout);
+				background.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
+				TextView heureDebut = (TextView) v.findViewById(R.id.coursHeureDebut);
+				heureDebut.setTextColor(Color.WHITE);
+				TextView heureFin = (TextView) v.findViewById(R.id.coursHeureFin);
+				heureFin.setTextColor(Color.WHITE);
+				TextView nomMatiere = (TextView) v.findViewById(R.id.coursNomMatiere);
+				nomMatiere.setTextColor(Color.WHITE);
+				TextView salle = (TextView) v.findViewById(R.id.coursSalle);
+				salle.setTextColor(Color.WHITE);
+				TextView type = (TextView) v.findViewById(R.id.coursType);
+				type.setTextColor(Color.WHITE);
+				LinearLayout barre = (LinearLayout) v.findViewById(R.id.coursBarre);
+				barre.setBackgroundResource(R.color.white);
+
+
+				//mise à jour de la barre indiquant l'avancée du cours
+				RelativeLayout timeBar = (RelativeLayout) v.findViewById(R.id.coursLigneTempsRestant);
+				long tempsDuCours = listeCours.get(0).getHeure_fin() - listeCours.get(0).getHeure_debut();
+				System.out.println("temps du cours " + tempsDuCours);
+
+				long tempspasse = heureCalendar.getTime().getTime() - listeCours.get(0).getHeure_debut();
+				System.out.println("temps passé " + tempspasse);
+				System.out.println(Math.round(v.getWidth()*((float)tempspasse/(float)tempsDuCours)) + "  ::: " + v.getWidth() + " ::::" +(tempspasse/tempsDuCours) );
+				timeBar.setLayoutParams(new android.widget.LinearLayout.LayoutParams(Math.round(v.getWidth()*((float)tempspasse/(float)tempsDuCours)),1));      
+				timeBar.setBackgroundResource(R.color.white);
+			}
 		}
-		else
-		{
-			System.out.println(index + " | " + matiereListView.getFirstVisiblePosition() + " | " + matiereListView.getLastVisiblePosition());
-			System.out.println("on peut pas modifier");
-		}
 	}
 
-	@Override
-	protected void onStart() {
-		// TODO Auto-generated method stub
-		super.onStart();
-	}
-
-
-	public void ajouterPeriode(View v)
-	{
-		Intent intention = new Intent(MainActivity.this, MatiereActivity.class);
-		startActivity(intention);
-
-		//DialogFragment newFragment = new PeriodeSellectionDialogFragment();
-		//newFragment.show(getFragmentManager(), "ih");
-		//String tag = "dez";
-		//newFragment.show(getFragmentManager(), tag);
-	}
 
 	public void goToNotes(View v)
 	{
@@ -334,7 +413,12 @@ public class MainActivity extends MenuActivity {
 		startActivity(intention);
 		this.overridePendingTransition(R.anim.animation_enter,
 				R.anim.animation_leave);
+	}
 
+	@Override
+	protected void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
 	}
 
 	@Override
@@ -360,4 +444,59 @@ public class MainActivity extends MenuActivity {
 		super.onRestoreInstanceState(savedInstanceState);
 	}
 
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		coursUpdater = new ListUpdater();
+		coursUpdater.execute();
+	}
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		coursUpdater.cancel(true);
+	}
+
+
+
+	private class ListUpdater extends AsyncTask<Void, Integer, Void>
+	{
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			Toast.makeText(getApplicationContext(), "Début du traitement asynchrone", Toast.LENGTH_LONG).show();
+		}
+
+		@Override
+		protected void onProgressUpdate(Integer... values){
+			super.onProgressUpdate(values);
+			// Mise à jour de la ProgressBar
+			MainActivity.this.updateCoursList();
+
+		}
+
+		@Override
+		protected Void doInBackground(Void... arg0) {
+
+			while(!isCancelled())
+			{
+				onProgressUpdate(1);
+				try {
+					Thread.sleep(4000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}	
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			Toast.makeText(getApplicationContext(), "Le traitement asynchrone est terminé", Toast.LENGTH_LONG).show();
+		}
+	}
 }
