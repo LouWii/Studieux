@@ -50,7 +50,7 @@ public class DevoirsActivity extends MenuActivity {
 		setContentView(R.layout.activity_devoirs);
 		
 		initMenu();
-		View v1 = findViewById(R.id.viewRed1);
+		View v1 = findViewById(R.id.viewRed3);
 		v1.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
 		currentButtonIndex = 3;
 	}

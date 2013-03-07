@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/periode_item_background_custom"
+    android:orientation="horizontal"
+    android:minHeight="90dp" >
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="20dp"
+        android:contentDescription="Icône Matière"
+        android:src="@drawable/periode_item_icon" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/devoirListItemNomDevoir"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text=""
+            android:textColorLink="@color/white"
+            android:textSize="@dimen/list_TitleItem"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/devoirListItemMatiereDevoir"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:text="" />
+        
+        <TextView
+            android:id="@+id/devoirListItemDeadlineDevoir"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:text="" />
+        
+
+    </LinearLayout>
+
+</LinearLayout>
