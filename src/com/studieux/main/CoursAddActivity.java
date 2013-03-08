@@ -31,11 +31,13 @@ import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.Html;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.view.WindowManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -61,6 +63,9 @@ public class CoursAddActivity extends MenuActivity {
 	EditText dateFinET;
 	EditText heureDebutET;
 	EditText heureFinET;
+	TextView type;
+	
+	String [] typesArray = {"Amphi", "Cours", "TD", "TP"};
 	
 	Calendar heureDebut;
 	Calendar heureFin;
@@ -177,6 +182,33 @@ public class CoursAddActivity extends MenuActivity {
 			Toast.makeText(CoursAddActivity.this, "Pas de matière liée...", Toast.LENGTH_SHORT).show();
 			finish();
 		}
+		
+		type = (EditText) findViewById(R.id.coursadd_courstype);
+		type.setClickable(true);
+		type.setFocusableInTouchMode(false);
+		type.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				CoursAddActivity.this.type.setInputType(InputType.TYPE_NULL);
+				AlertDialog.Builder builder = new AlertDialog.Builder(CoursAddActivity.this);
+				builder.setTitle("Quotient");
+			
+				builder.setItems(typesArray, new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						CoursAddActivity.this.type.setText(CoursAddActivity.this.typesArray[which]);
+						
+					}
+
+				});
+				builder.create();         
+				builder.show();
+			}
+			
+		});
+		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
 	}
 	
 	@Override
@@ -304,7 +336,7 @@ public class CoursAddActivity extends MenuActivity {
 	public void enregistrer(View v)
 	{
 		//Si le type est vide, on alerte et on stoppe l'enregistrement
-		TextView type = (TextView)findViewById(R.id.coursadd_courstype);
+		
 		if (type.getText().toString().equals("") )
 		{
 			new AlertDialog.Builder(this).setTitle("Type de cours vide")
