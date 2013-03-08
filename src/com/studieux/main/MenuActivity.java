@@ -41,14 +41,13 @@ public class MenuActivity extends Activity {
         menu.setMenu(R.layout.sliding_menu);
         menu.setBehindOffset(behindOffset);
 
-        this.menuButtons = new MenuButton[6];
+        this.menuButtons = new MenuButton[5];
         
         this.menuButtons[0] = (MenuButton) findViewById(R.id.acceuilButton);
         this.menuButtons[1] = (MenuButton) findViewById(R.id.periodesButton);
-        this.menuButtons[2] = (MenuButton) findViewById(R.id.devoirsButton);
-        this.menuButtons[3] = (MenuButton) findViewById(R.id.matieresButton);
+        this.menuButtons[2] = (MenuButton) findViewById(R.id.matieresButton);
+        this.menuButtons[3] = (MenuButton) findViewById(R.id.devoirsButton);
         this.menuButtons[4] = (MenuButton) findViewById(R.id.notesButton);
-        this.menuButtons[5] = (MenuButton) findViewById(R.id.parametresButton);
        
         for(int i = 0 ; i < menuButtons.length ; i++)
         {

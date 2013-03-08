@@ -57,6 +57,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AnalogClock;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -93,9 +94,9 @@ public class MainActivity extends MenuActivity {
 
 	//LisstView des devoirs
 	private ListView devoirsLisView;
-	
-	
-	
+
+
+
 	//graph stuff
 	private XYMultipleSeriesDataset dataset;
 	private XYMultipleSeriesRenderer renderer;
@@ -119,7 +120,6 @@ public class MainActivity extends MenuActivity {
 			initNotesGraph();
 			initDateTV();
 			initCoursList();
-			initDevoirsList();
 		}		
 	}
 
@@ -305,8 +305,8 @@ public class MainActivity extends MenuActivity {
 				if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
 				{
 
-					
-					
+
+
 					Date d = new Date();
 					Calendar calendar = Calendar.getInstance();
 					int day = calendar.get(Calendar.DAY_OF_WEEK);
@@ -325,7 +325,7 @@ public class MainActivity extends MenuActivity {
 						if(listeCours.size() != oldCoursCount)
 						{
 							MainActivity.this.data.clear();
-							
+
 							oldCoursCount = listeCours.size();
 							for(Cours c : listeCours)
 							{
@@ -400,6 +400,8 @@ public class MainActivity extends MenuActivity {
 				LinearLayout barre = (LinearLayout) v.findViewById(R.id.coursBarre);
 				barre.setBackgroundResource(R.color.white);
 
+				ImageView img = (ImageView) v.findViewById(R.id.coursIcon);
+				img.setImageResource(R.drawable.blackboard_white);
 
 				//mise à jour de la barre indiquant l'avancée du cours
 				RelativeLayout timeBar = (RelativeLayout) v.findViewById(R.id.coursLigneTempsRestant);
@@ -415,121 +417,108 @@ public class MainActivity extends MenuActivity {
 		}
 	}
 
-	
-	//--------------------------Methodes pour la iste des devoirs-------------------------------------------------------------------------------
-	
-	public void initDevoirsList()
-	{
-		String[] from = {"heure_debut", "heure_fin", "matiereNom", "type", "salle"};
-		int[] to = { R.id.coursHeureDebut , R.id.coursHeureFin, R.id.coursNomMatiere, R.id.coursType, R.id.coursSalle };
-		data = new ArrayList<Map<String, String>>();
-		//Adapter pour notre listView
-		adapter = new SimpleAdapter(this, 
-				data,
-				R.layout.cours_list_item,
-				from,
-				to);
-		//on récupère la liste on lui affecte l'adapter
-		coursListView = (ListView) findViewById(R.id.coursListView);
 
-		coursListView.setAdapter(adapter);
-	}
-	
+	//--------------------------Methodes pour la iste des devoirs-------------------------------------------------------------------------------
+
+
 	public void updateDevoirsList()
 	{
-		 //Recupération des periodes en BD
-        String ddColumn = DevoirDao.Properties.Deadline.columnName;
-        String orderBy = ddColumn + " COLLATE LOCALIZED ASC";
-        cursor = db.query(devoirDao.getTablename(), devoirDao.getAllColumns(), null, null, null, null, orderBy);
-        //String[] from = { PeriodeDao.Properties.Nom.columnName, ddColumn, PeriodeDao.Properties.Date_fin.columnName };
-        
-        if (cursor.getCount() != 0) //si on a des résultats (sinon c'est inutile)
-        {
-	        String[] from = {"title", "date_rendu", "matiere"};
-	        int[] to = { R.id.devoirListItemNomDevoir , R.id.devoirListItemDeadlineDevoir, R.id.devoirListItemMatiereDevoir };
-	        
-	        //On parse la liste pour convertir les long en Date, avant affichage
-	        List<Map<String, String>> data = new ArrayList<Map<String, String>>();
-	        Matiere m;
-	        cursor.moveToFirst();
-	        do     
-	        {
-	        	//Contient le détail d'une période
-	        	Map<String, String> datum = new HashMap<String, String>(3);
-	        	datum.put("id", "" + cursor.getLong(DevoirDao.Properties.Id.ordinal) );
-	        	datum.put("title", cursor.getString(DevoirDao.Properties.Nom.ordinal));
-	        	SimpleDateFormat dateFormater = new SimpleDateFormat("dd MM yyyy");
-	        	Date d = new Date(cursor.getLong(DevoirDao.Properties.Deadline.ordinal));
-	        	datum.put("date_rendu", "Date de rendu : " + dateFormater.format(d));
-	        	m = matiereDao.load(cursor.getLong(DevoirDao.Properties.MatiereId.ordinal));
-	        	datum.put("matiere", m.getNom());
-	        	data.add(datum);
-	        } while (cursor.moveToNext());
-	        //Toast.makeText(PeriodeActivity.this, "t: " + data.size() + ";" + cursor.getCount(), Toast.LENGTH_SHORT).show();
-	        
-	        //Adapter pour notre listView
-	        SimpleAdapter adapter = new SimpleAdapter(this, 
-	        		data,
-	        		R.layout.devoir_list_item,
-	                from,
-	                to);
-	        
-	        //on récupère la liste on lui affecte l'adapter
-	    	ListView listview = (ListView) findViewById(R.id.devoirs_listview);
-	    	
-	    	listview.setAdapter(adapter);
-	    	
-	    	listview.setOnItemClickListener(new OnItemClickListener() {
+		if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+		{
+			//Recupération des periodes en BD
+			String ddColumn = DevoirDao.Properties.Deadline.columnName;
+			String orderBy = ddColumn + " COLLATE LOCALIZED ASC";
+			cursor = db.query(devoirDao.getTablename(), devoirDao.getAllColumns(), null, null, null, null, orderBy);
+			//String[] from = { PeriodeDao.Properties.Nom.columnName, ddColumn, PeriodeDao.Properties.Date_fin.columnName };
 
-				@Override
-				public void onItemClick(AdapterView<?> arg0, View arg1,
-						int arg2, long arg3) {
-					HashMap<String, String> data = (HashMap<String, String>) arg0.getItemAtPosition(arg2);
-					final Devoir d = devoirDao.load(Long.parseLong(data.get("id")));
-					SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
-					String details = "<b>" + d.getNom() + "</b><br>"
-							+ "en " + d.getMatiere().getNom() + "<br>"
-							+ " pour le <b>" + dateFormatter.format(d.getDeadline()) + "</b><br/>";
-					if (d.getDescription() != null)
-					{
+			if (cursor.getCount() != 0) //si on a des résultats (sinon c'est inutile)
+			{
+				String[] from = {"title", "date_rendu", "matiere"};
+				int[] to = { R.id.devoirListItemNomDevoir , R.id.devoirListItemDeadlineDevoir, R.id.devoirListItemMatiereDevoir };
+
+				//On parse la liste pour convertir les long en Date, avant affichage
+				List<Map<String, String>> devoirsData = new ArrayList<Map<String, String>>();
+				Matiere m;
+				cursor.moveToFirst();
+				do     
+				{
+					//Contient le détail d'une période
+					Map<String, String> datum = new HashMap<String, String>(3);
+					datum.put("id", "" + cursor.getLong(DevoirDao.Properties.Id.ordinal) );
+					datum.put("title", cursor.getString(DevoirDao.Properties.Nom.ordinal));
+					SimpleDateFormat dateFormater = new SimpleDateFormat("dd MM yyyy");
+					Date d = new Date(cursor.getLong(DevoirDao.Properties.Deadline.ordinal));
+					datum.put("date_rendu", "Date de rendu : " + dateFormater.format(d));
+					m = matiereDao.load(cursor.getLong(DevoirDao.Properties.MatiereId.ordinal));
+					datum.put("matiere", m.getNom());
+					devoirsData.add(datum);
+				} while (cursor.moveToNext());
+				//Toast.makeText(PeriodeActivity.this, "t: " + data.size() + ";" + cursor.getCount(), Toast.LENGTH_SHORT).show();
+
+				//Adapter pour notre listView
+				SimpleAdapter devoirsAdapter = new SimpleAdapter(this, 
+						devoirsData,
+						R.layout.devoir_main_list_item,
+						from,
+						to);
+
+				//on récupère la liste on lui affecte l'adapter
+				ListView listview = (ListView) findViewById(R.id.devoirsListView);
+
+				listview.setAdapter(devoirsAdapter);
+
+				listview.setOnItemClickListener(new OnItemClickListener() {
+
+					@Override
+					public void onItemClick(AdapterView<?> arg0, View arg1,
+							int arg2, long arg3) {
+						HashMap<String, String> data = (HashMap<String, String>) arg0.getItemAtPosition(arg2);
+						final Devoir d = devoirDao.load(Long.parseLong(data.get("id")));
+						SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
+						String details = "<b>" + d.getNom() + "</b><br>"
+								+ "en " + d.getMatiere().getNom() + "<br>"
+								+ " pour le <b>" + dateFormatter.format(d.getDeadline()) + "</b><br/>";
+						if (d.getDescription() != null)
+						{
 							details += "<b>Détails :</b><br>"
-							+ d.getDescription();
+									+ d.getDescription();
+						}
+
+						new AlertDialog.Builder(MainActivity.this).setTitle(d.getNom())
+						.setMessage(Html.fromHtml(details))
+						.setPositiveButton("OK", null)
+						.setNegativeButton("Je l'ai fait, à supprimer de la liste !", new android.content.DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								devoirDao.delete(d);
+								updateDevoirsList();
+							}
+						})
+						.show();
+
 					}
-					
-					new AlertDialog.Builder(DevoirsActivity.this).setTitle(d.getNom())
-							.setMessage(Html.fromHtml(details))
-							.setPositiveButton("OK", null)
-							.setNegativeButton("Je l'ai fait, à supprimer de la liste !", new OnClickListener() {
-								
-								@Override
-								public void onClick(DialogInterface dialog, int which) {
-									devoirDao.delete(d);
-									updateList();
-								}
-							})
-							.show();
-					
-				}
-			});
-	    	
-	    	listview.setOnItemLongClickListener( new OnItemLongClickListener () {
-	
-				@Override
-				public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-					// On récupère l'item clické = HashMap<String, String>
-					HashMap<String, String> data = (HashMap<String, String>) arg0.getItemAtPosition(arg2);
-					
-					Intent intention = new Intent(DevoirsActivity.this, DevoirsAddActivity.class);
-					intention.putExtra( "id", Long.parseLong(data.get("id")) );
-					startActivity(intention);
-					
-					//Toast.makeText(PeriodeActivity.this, "id: " + data.get("id"), Toast.LENGTH_SHORT).show();
-					
-					return false;
-				}
-	    		
-	    	});
-        }
+				});
+
+				listview.setOnItemLongClickListener( new OnItemLongClickListener () {
+
+					@Override
+					public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+						// On récupère l'item clické = HashMap<String, String>
+						HashMap<String, String> data = (HashMap<String, String>) arg0.getItemAtPosition(arg2);
+
+						Intent intention = new Intent(MainActivity.this, DevoirsAddActivity.class);
+						intention.putExtra( "id", Long.parseLong(data.get("id")) );
+						startActivity(intention);
+
+						//Toast.makeText(PeriodeActivity.this, "id: " + data.get("id"), Toast.LENGTH_SHORT).show();
+
+						return false;
+					}
+
+				});
+			}
+		}
 	}
 
 	public void goToNotes(View v)
@@ -593,7 +582,7 @@ public class MainActivity extends MenuActivity {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			Toast.makeText(getApplicationContext(), "Début du traitement asynchrone", Toast.LENGTH_LONG).show();
+			//Toast.makeText(getApplicationContext(), "Début du traitement asynchrone", Toast.LENGTH_LONG).show();
 		}
 
 		@Override
@@ -622,7 +611,7 @@ public class MainActivity extends MenuActivity {
 
 		@Override
 		protected void onPostExecute(Void result) {
-			Toast.makeText(getApplicationContext(), "Le traitement asynchrone est terminé", Toast.LENGTH_LONG).show();
+			//Toast.makeText(getApplicationContext(), "Le traitement asynchrone est terminé", Toast.LENGTH_LONG).show();
 		}
 	}
 }

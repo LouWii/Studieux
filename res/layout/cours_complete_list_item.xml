@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:contentDescription="Icône Matière"
-            android:src="@drawable/periode_item_icon" />
+            android:src="@drawable/blackboard_grey" />
 
         <TextView
             android:id="@+id/coursHeureDebut"

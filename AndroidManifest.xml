@@ -72,11 +72,13 @@
         </activity>
         <activity
             android:name="com.studieux.main.DevoirsActivity"
-            android:label="@string/title_activity_devoirs" >
+            android:label="@string/title_activity_devoirs"
+            android:theme="@style/MyTheme" >
         </activity>
         <activity
             android:name="com.studieux.main.DevoirsAddActivity"
-            android:label="@string/title_activity_devoirs_add" >
+            android:label="@string/title_activity_devoirs_add"
+            android:theme="@style/MyTheme" >
         </activity>
     </application>
 
