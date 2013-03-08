@@ -232,7 +232,7 @@ public class CoursAddActivity extends MenuActivity {
 			heureDebut.clear();
 			heureDebut.set(1, 1, 1, hourOfDay, minute, 0);
 			heureDebutET.setText(heureFormatter.format(heureDebut.getTime()));
-			Toast.makeText(CoursAddActivity.this, "" + heureDebut.getTimeInMillis(), Toast.LENGTH_SHORT).show();
+			//Toast.makeText(CoursAddActivity.this, "" + heureDebut.getTimeInMillis(), Toast.LENGTH_SHORT).show();
 		}
 	};
 	
@@ -247,7 +247,7 @@ public class CoursAddActivity extends MenuActivity {
 			heureFin.clear();
 			heureFin.set(1, 1, 1, hourOfDay, minute, 0);
 			heureFinET.setText(heureFormatter.format(heureFin.getTime()));
-			Toast.makeText(CoursAddActivity.this, "" + heureFin.getTimeInMillis(), Toast.LENGTH_SHORT).show();
+			//Toast.makeText(CoursAddActivity.this, "" + heureFin.getTimeInMillis(), Toast.LENGTH_SHORT).show();
 		}
 	};
 	
@@ -412,7 +412,7 @@ public class CoursAddActivity extends MenuActivity {
 		);
 		List<Cours> lesCours = qb.list(); //cours chevauchant le nouveau cours
 		
-		Toast.makeText(CoursAddActivity.this, "list chevauch " + lesCours.size(), Toast.LENGTH_SHORT).show();
+		//Toast.makeText(CoursAddActivity.this, "list chevauch " + lesCours.size(), Toast.LENGTH_SHORT).show();
 		
 		System.out.println(dateDebutDate);
 		//on va vérifier si les cours ne se chevauchent  pas car dates décalées
